@@ -1,0 +1,7 @@
+autotone
+
+color balance
+
+shadows: -100 0 -100
+
+image size: 1500 px largura 
