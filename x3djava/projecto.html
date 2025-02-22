@@ -1,0 +1,397 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Untitled Document</title>
+<style type="text/css">
+<!--
+#Layer1 {
+	position:absolute;
+	left:7px;
+	top:0;
+	width:656px;
+	height:398px;
+	z-index:1;
+}
+.style1 {
+	font-size: 18px;
+	font-weight: bold;
+}
+a:link {
+	color: #0033CC;
+}
+a:visited {
+	color: #0033CC;
+}
+a:hover {
+	color: #990000;
+}
+a:active {
+	color: #0033CC;
+}
+-->
+</style>
+</head>
+
+<body>
+<div id="Layer1">
+  <p align="justify" class="style1">Projecto</p>
+  <p align="justify">Como projecto de fim de curso, foi desenvolvido por mim um prot&oacute;tipo de um jogo estilo RPG de  fantasia, utilizando X3D e Java.</p>
+  <p align="justify">O interface deste jogo est&aacute; dividido em duas partes, a janela 3D onde  se pode visualizar a cena tridimensional criada e se desenrola toda a ac&ccedil;&atilde;o do  jogo e uma &ldquo;barra&rdquo; 2D criada em Java que possui todos os comandos que permitem  ao jogador interagir com o mundo virtual. </p>
+  <p align="justify">O jogador poder&aacute;,  ao in&iacute;cio do jogo, escolher uma personagem e modificar algumas das suas  caracter&iacute;sticas. Depois de iniciado o jogo, o jogador poder&aacute; explorar um mundo,  realizando algumas tarefas, combatendo alguns inimigos e tentando, assim,  atingir os objectivos que v&atilde;o surgindo.</p>
+  <p align="justify">Nesta sec&ccedil;&atilde;o v&atilde;o ser explicadas as t&eacute;cnicas utilizadas na  implementa&ccedil;&atilde;o da fase de selec&ccedil;&atilde;o da personagem no jogo, de maneira a  ilustrar os exemplos de integra&ccedil;&atilde;o entre X3D e Java  abordados nesta p&aacute;gina web. </p>
+  <p align="justify"><a href="#seleccionar_personagem">Selecção da raça da personagem</a></p>
+  <p align="justify"><a href="#select_cor">Seleccionar a cor da personagem</a></p>
+  <p align="justify"><a href="#select_armadura">Seleccionar uma armadura para a personagem</a></p>
+  <p align="justify"><a href="#select_mat_armadura">Modificar   o material das armaduras </a></p>
+  <p align="justify"><a href="#varios_angulos">Visualizar a personagem em diferentes ângulos</a></p>
+  <p align="justify"><a href="#caracteristicas">Caracteristicas da personagem escolhida</a></p>
+  <p align="justify"><a href="#iniciar_jogo">Iniciar Jogo</a></p>
+  <p align="justify"><a href="#imagens">Imagens do jogo </a></p>
+  <p align="justify">&nbsp;</p>
+  <p class="style1">_________________________________________</p>
+  <p align="justify" class="style1">&nbsp;</p>
+  <p align="justify" class="style1"><a name="seleccionar_personagem" id="seleccionar_personagem"></a><a name="_Toc121219779" id="_Toc121219779"> Selec&ccedil;&atilde;o  da ra&ccedil;a da personagem</a></p>
+  <p align="justify">Foi criado um  ficheiro x3d onde est&atilde;o contidas todas as personagens (personagens.x3d). Estas  personagens est&atilde;o organizadas num <em>Switch</em> pelo que n&atilde;o vai ser poss&iacute;vel ver nenhuma personagem at&eacute; se escolher uma no  respectivo bot&atilde;o.</p>
+  <p align="justify">Para al&eacute;m das  personagens, neste ficheiro existe tamb&eacute;m as declara&ccedil;&otilde;es dos <em>protos (prototipes)</em> das representa&ccedil;&otilde;es  das armaduras poss&iacute;veis para cada personagem (duas armaduras por personagem). </p>
+  <p align="justify">Para seleccionar  uma personagem o utilizador dever&aacute; clicar no respectivo bot&atilde;o. </p>
+  <p align="center"><img src="imagens/projecto/escolher personagem.jpg" width="500" height="438" /></p>
+  <p align="justify">Ao clicar num  dos bot&otilde;es de selec&ccedil;&atilde;o da personagem, vai ser escolhido no <em>switch</em> o &iacute;ndice da personagem escolhida, de maneira a torn&aacute;-la  vis&iacute;vel. Seguidamente vai explicar-se o c&oacute;digo Java referente ao bot&atilde;o de  selec&ccedil;&atilde;o do personagem &ldquo;humano&rdquo;:</p>
+  <p align="justify">Devido ao facto  de estarmos a usar <em>protos</em> existe a  necessidade de haver instancia&ccedil;&atilde;o dos mesmos para estes se tornarem vis&iacute;veis.  Em primeiro lugar vai ser verificado se j&aacute; existe alguma inst&acirc;ncia criada de  uma armadura (Figura 74). Isto poderia acontecer se o jogador tivesse  seleccionado uma personagem e aplicado uma armadura. Se n&atilde;o se estivesse a  fazer esta verifica&ccedil;&atilde;o, ao seleccionar este novo personagem, a armadura do  anterior continuaria vis&iacute;vel.</p>
+  <table width="394" border="1" align="center">
+    <tr>
+      <td><p>if(instancia_armadura!=null){ <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  mainScene.removeRootNode(instancia_armadura);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</p></td>
+    </tr>
+  </table>
+  <p align="justify">De seguida vai  seleccionar-se o &iacute;ndice no <em>switch</em> respectivo da personagem seleccionada, e activar o <em>viewpoint</em> da personagem, como se pode ver a seguir. </p>
+  <table width="504" border="1" align="center">
+    <tr>
+      <td><p>// ---------------- seleccionar o  humano no switch<br />
+        SFInt32 escolha;<br />
+        X3DNode  switch_prsonagens = mainScene.getNamedNode(&quot;LOD2&quot;);<br />
+        escolha =  (SFInt32 ) switch_prsonagens.getField(&quot;whichChoice&quot;);<br />
+        escolha.setValue(1);</p>
+        <p><br />
+          // ----------- mudar o viewpoint para o  do humano<br />
+          X3DNode view =  mainScene.getNamedNode(&quot;VP_HUMANO&quot;);<br />
+          SFBool&nbsp; bind_view = (SFBool )  view.getField(&quot;set_bind&quot;);<br />
+      bind_view.setValue(true);</p></td>
+    </tr>
+  </table>
+  <p align="justify">Devido ao facto  de cada personagem ter as suas armaduras espec&iacute;ficas e as texturas dispon&iacute;veis  para as armaduras de cada personagem serem diferentes, vai modificar-se os  &iacute;cones dos bot&otilde;es de selec&ccedil;&atilde;o das armaduras (dois &iacute;cones) e de selec&ccedil;&atilde;o das  texturas de cada armadura (oito &iacute;cones). Esta actualiza&ccedil;&atilde;o pode ser vista a seguir.
+  </p>
+  <table width="591" border="1" align="center">
+    <tr>
+      <td><p>// ----------------  colocar imagens das armaduras deste personagem<br />
+        Armadura_01_B.setIcon(new  javax.swing.ImageIcon(&quot;imagens_armaduras\\armadura01-humano.jpg&quot;));<br />
+  &hellip;<br />
+  &hellip;<br />
+        //------ colocar as  imagens das texturas da personagem<br />
+        Aplicar_textura_1.setIcon(new  javax.swing.ImageIcon(&quot;textura_humano\\im1.jpg&quot;));<br />
+  &hellip;<br />
+  &hellip;</p></td>
+    </tr>
+  </table>
+  <p align="justify">Finalmente s&atilde;o definidas as caracter&iacute;sticas  iniciais deste tipo de personagem. Estas caracter&iacute;sticas v&atilde;o ser vis&iacute;veis no menu com  o mesmo nome e podem sofrer altera&ccedil;&otilde;es ao longo do jogo.</p>
+  <table width="525" border="1" align="center">
+    <tr>
+      <td><p>//defini&ccedil;o das  caracteristicas desta ra&ccedil;a<br />
+        String  raca=(&quot;Humano&quot;);<br />
+        String  classe=(&quot;Guerreiro&quot;);<br />
+        XP=3;&nbsp; //EXPERIENCIA<br />
+        HP=110; //PONTOS DE VIDA <br />
+        MANA=10; //PONTOS DE  MAGIA ACTUAIS - importante para magos<br />
+        DEX=12; //DESTREZA -  abilidade importante para ladr&otilde;es<br />
+        STR=21; //FOR&Ccedil;A - hablilidade  principal para o ataque corpo a corpo <br />
+        CONS=16; //CONSTITUI&Ccedil;&Atilde;O  FISICA - prevenir daos nos ataques recebidos<br />
+      INT=8; // INTELIGENCIA -  inmportante para utilizadores de magia</p></td>
+    </tr>
+  </table>
+  <p align="justify"> Depois de  clicado o bot&atilde;o, &eacute; agora poss&iacute;vel ver a personagem &rdquo;humano&rdquo;. </p>
+  <p align="center"><img src="imagens/projecto/escolher humano.jpg" width="500" height="439" /></p>
+  <p align="justify">Tal como foi dito  anteriormente, existem tamb&eacute;m neste ficheiro a declara&ccedil;&atilde;o de dois <em>protos </em>que s&atilde;o a representa&ccedil;&atilde;o das  armaduras poss&iacute;veis para o &ldquo;humano&rdquo;. Estes objectos unicamente ficam vis&iacute;veis  depois de criadas instancias destes <em>Protos</em>.  Isto vai acontecer unicamente na parte de selec&ccedil;&atilde;o das armaduras.</p>
+  <p align="justify">&nbsp;</p>
+  <p align="justify" class="style1"><a name="select_cor" id="select_cor"></a>Seleccionar a cor da personagem </p>
+  <p align="justify">Como a etapa  seguinte &eacute; a selec&ccedil;&atilde;o das cores da personagem, o utilizador dever&aacute; clicar na  parte do personagem &agrave; qual que pretende modificar a cor. </p>
+  <p align="center"><img src="imagens/projecto/escolher cor.jpg" width="500" height="438" /></p>
+  <p align="justify">Devido a esta  necessidade, est&atilde;o associados sensores de toque a cada uma das partes do  personagem suscept&iacute;veis de ser alterada a cor (pele, cabelo, cal&ccedil;as). </p>
+  <p align="justify">A partir do momento em que uma parte do corpo &eacute; seleccionada o sensor  de toque no respectivo gera um evento e consequentemente &eacute; accionado o <em>eventListener</em> e chamada a fun&ccedil;&atilde;o <em>readableFieldChanged</em>, onde v&atilde;o estar as  ac&ccedil;&otilde;es que ocorrem quando existe uma modifica&ccedil;&atilde;o de um campo x3d associado a  esse <em>eventListener</em>. A seguirpode ver-se o c&oacute;digo para se verificar quando o  cabelo da personagem &eacute; clicado.  </p>
+  <table width="527" border="1" align="center">
+    <tr>
+      <td><p>X3DNode toke_cabelo_Humano =  mainScene.getNamedNode(&quot;Sensor_toke_cabelo_H&quot;);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+        ttime_cabelo_humano = (SFTime)  toke_cabelo_Humano.getField(&quot;touchTime&quot;);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; <br />
+        ttime_cabelo_humano.setUserData(EVENTO_CABELO_HUMANO);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+      ttime_cabelo_humano.addX3DEventListener(this);</p></td>
+    </tr>
+  </table>
+  <p align="justify">Nesta fun&ccedil;&atilde;o (<em>readableFieldChanged)</em> &eacute; definido o valor da vari&aacute;vel &ldquo;sensor&rdquo;, de maneira a identificar qual dos sensores de toque  do corpo da personagem foi clicado. Isto vai ser &uacute;til para quando &eacute;  seleccionada a cor, esta ser aplicada &aacute; parte do corpo da personagem que foi  clicada e n&atilde;o a outra. </p>
+  <table width="410" border="1" align="center">
+    <tr>
+      <td><p>sensor=1 &agrave; foi clicado o corpo do personagem  &ldquo;humano&rdquo;<br />
+        sensor=2 &agrave; foi clicado o cabelo do personagem  &ldquo;humano&rdquo;<br />
+      sensor=3 &agrave; foram clicadas as cal&ccedil;as do personagem  &ldquo;humano&rdquo;</p></td>
+    </tr>
+  </table>
+  <p align="justify">A partir deste  momento tem-se identificada qual a parte da personagem que foi clicada, podendo  ent&atilde;o passar para a parte de encolha e aplica&ccedil;&atilde;o da cor. Podemos ver na caixa  de texto existente no interface qual a parte do corpo da personagem que est&aacute;  seleccionada para ser modificada a cor.</p>
+  <p align="justify">Depois de  seleccionar a cor pretendida o utilizador deve carregar no bot&atilde;o &ldquo;Aplicar cor&rdquo;  Associado a este bot&atilde;o est&aacute; um evento que vai aplicar a cor &agrave; parte do corpo  seleccionada. Em primeiro lugar vai ser capturada a cor do painel&nbsp; <em>JcolorChooser.</em></p>
+  <p align="justify">Color  cor_escolhida = Painel_cores.getColor();</p>
+  <p align="justify">&Agrave; vari&aacute;vel  &ldquo;cor_escolhida&rdquo; vai ser atribu&iacute;do o valor RGB da cor escolhida, como por  exemplo Java.awt.Color[r=102,g=255,b=102].  Este valor vai ser atribu&iacute;do ao campo <em>diffusecolor</em> da parte do corpo seleccionada da personagem. Neste  momento surge um problema, pois o campo <em>diffuseColor</em> armazena um vector de tr&ecirc;s n&uacute;meros reais, como por exemplo (0.4 , 0.1 , 0.6)</p>
+  <p align="justify">Na vari&aacute;vel  &ldquo;cor_escolhida&rdquo; tem-se um valor do g&eacute;nero Java.awt.Color[r=102,g=255,b=102],  pelo que tem de fazer-se algumas modifica&ccedil;&otilde;es.</p>
+  <p align="justify">Em primeiro lugar vai separar-se cada uma das  componentes RGB em vari&aacute;veis reparadas, e de seguida dividir cada uma delas por  255 de maneira a obter-se as componentes n&atilde;o no intervalo de 0 a 255, mas sim  de 0 a 1 que &eacute; o formato predefinido para a cor na especifica&ccedil;&atilde;o do X3D.</p>
+  <table width="578" border="1" align="center">
+    <tr>
+      <td><p><strong>Partindo do exemplo em que se tinha:</strong><br />
+        cor_escolhida=  Java.awt.Color[r=102,g=255,b=102]</p>
+        <p><strong>Fazendo:</strong><br />
+          float  corRed=(float)cor_escolhida.getRed()/255;<br />
+          float corGreen=(float)cor_escolhida.getGreen()/255;<br />
+          float corBlue=(float)cor_escolhida.getBlue()/255;</p>
+        <p><strong>Obtem-se:</strong><br />
+          corRed=0.4<br />
+          corGreen =1.0<br />
+          corBlue =0.4</p>
+        <p><strong>Neste momento apenas falta guardar estes  valores num vector de n&uacute;meros reais:</strong><br />
+      float[] RGB = {corRed,corGreen,corBlue};</p></td>
+    </tr>
+  </table>
+  <p align="justify">Dependendo da  parte do corpo seleccionada anteriormente, vai agora buscar-se o campo <em>diffuseColor</em> do material pretendido ao  ficheiro x3d, e mudar o seu valor para a nova cor calculada.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</p>
+  <table width="428" border="1" align="center">
+    <tr>
+      <td><p>corpo_humano =  mainScene.getNamedNode(&quot;A_0_mat&quot;);<br />
+        color = (SFColor) corpo_humano.getField(&quot;diffuseColor&quot;);<br />
+      color.setValue(RGB); </p></td>
+    </tr>
+  </table>
+  <p align="justify">Tal como tinha  dito anteriormente, na fun&ccedil;&atilde;o <em>readableFieldChanged</em> foi identificada qual a parte do corpo &agrave; qual se pretende alterar a cor, e  associado um valor &agrave; vari&aacute;vel &ldquo;sensor&rdquo; que vai identificar o material ao qual se  pretende alterar a cor. Deste modo a cor &eacute; aplicada unicamente ao objecto  seleccionado.
+  </p>
+  <table width="479" border="1" align="center">
+    <tr>
+      <td><p>if(sensor==1){ //  ----------------------- cor CORPO - humano<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; corpo_humano =  mainScene.getNamedNode(&quot;A_0_mat&quot;);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; color  = (SFColor) corpo_humano.getField(&quot;diffuseColor&quot;);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; color.setValue(RGB);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+        if(sensor==2){&nbsp; // -------------- cor CABELO - humano<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; corpo_humano =  mainScene.getNamedNode(&quot;cor_cabelo_mat&quot;);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; color  = (SFColor) corpo_humano.getField(&quot;diffuseColor&quot;);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; color.setValue(RGB);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+        if(sensor==3){//&nbsp; ------------------ cor CAL&Ccedil;AS - humano<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; corpo_humano = mainScene.getNamedNode(&quot;Branco_mat&quot;);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; color  = (SFColor) corpo_humano.getField(&quot;diffuseColor&quot;);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; color.setValue(RGB);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+  &hellip;<br />
+  &hellip;</p></td>
+    </tr>
+  </table>
+  <p align="justify">Se o utilizador  clicar no bot&atilde;o &ldquo;Aplicar Cor&rdquo; sem antes ter seleccionado uma parte do corpo da  personagem, uma mensagem vai avisar que &eacute; necess&aacute;rio realizar essa ac&ccedil;&atilde;o em  primeiro lugar.</p>
+  <p align="justify">&nbsp;</p>
+  <p align="justify" class="style1"><a name="select_armadura" id="select_armadura"></a><a name="_Toc121219781" id="_Toc121219781">Seleccionar  uma armadura para a personagem</a></p>
+  <p align="justify">A selec&ccedil;&atilde;o da  armadura da personagem &eacute; feita usando os bot&otilde;es presentes nesta sec&ccedil;&atilde;o da  aplica&ccedil;&atilde;o. Existem t&ecirc;s bot&otilde;es, dois para dois tipos diferentes de armaduras e  um para retirar a armadura escolhida. </p>
+  <p align="center"><img src="imagens/projecto/escolher armadura.jpg" width="500" height="439" /></p>
+  <p align="justify">Ao clicar numa  das armaduras, esta vai ser atribu&iacute;da ao personagem e a sua representa&ccedil;&atilde;o  aparece no browser. Estas armaduras encontram-se armazenadas no mesmo ficheiro  que as personagens. Neste ficheiro existem as declara&ccedil;&otilde;es dos <em>protos</em> das armaduras. </p>
+  <p align="justify">Como no  ficheiro x3d n&atilde;o existem instancias destes <em>Protos</em>,  as armaduras n&atilde;o aparecem quando o utilizador selecciona a personagem, mas  unicamente quando selecciona a armadura, onde &eacute; criada a referida instancia. </p>
+  <p align="justify">Em primeiro  lugar &eacute; verificado se a vari&aacute;vel que guarda a inst&acirc;ncia da armadura j&aacute; tem  algum valor, para o caso de j&aacute; ter sido atribu&iacute;da uma inst&acirc;ncia de uma armadura  anterior. No caso de j&aacute; existir uma inst&acirc;ncia anterior, esta &eacute; eliminada, pois  se isto n&atilde;o fosse feito, ao criar a nova instancia, ficaria uma armadura por  cima de outra.</p>
+  <p align="justify">De seguida &eacute;  criada a inst&acirc;ncia do <em>proto</em> da  armadura pretendida, dependendo de que personagem se encontra seleccionado. </p>
+  <table width="200" border="1" align="center">
+    <tr>
+      <td> <p>if(instancia_armadura==null){  // verificar se ja tinha sido adinionada uma armadura<br />
+          <br />
+          instancia_armadura=mainScene.getProto(&quot;Armadura01_humano&quot;).createInstance();<br />
+mainScene.addRootNode(instancia_armadura);</p>
+        <p>...<br />
+        </p></td>
+    </tr>
+  </table>
+  <p align="justify">&nbsp;</p>
+  <p align="justify" class="style1"><a name="select_mat_armadura" id="select_mat_armadura"></a><a name="_Toc121219782" id="_Toc121219782">Modificar  material das armaduras</a></p>
+  <p align="justify">Nesta sec&ccedil;&atilde;o o  utilizador poder&aacute; modificar a textura constituinte do material das armaduras,  atribuindo-lhes uma apar&ecirc;ncia diferente. Existe um pormenor que tem de se  destacar nesta parte. </p>
+  <p align="justify">Para se modificar  uma textura de um objecto usando SAI, temos de aceder ao ficheiro x3d,  encontrar o nome do material ao qual pretendemos modificar a textura, aceder ao  campo &ldquo;url&rdquo;, e modificar o seu valor de maneira a atribuir uma nova imagem para  ser a textura do objecto.</p>
+  <table width="397" border="1" align="center">
+    <tr>
+      <td><p>X3DNode&nbsp; mat = mainScene.getNamedNode(&quot;MATERIAL&quot;);<br />
+        textura = (MFString) mat.getField(&quot;url&quot;);<br />
+        String[] val=new String[1]; <br />
+        val[0]= (String)&quot;im.jpg&quot;; <br />
+        System.out.println(val[0]);<br />
+      textura.set1Value(0,val[0]);</p></td>
+    </tr>
+  </table>
+  <p align="justify">Neste caso  especifico isto n&atilde;o se desenvolve propriamente desta maneira. Enquanto que no  caso explicado anteriormente, havia um objecto numa cena x3d ao qual se ia  modificar o valor do campo &ldquo;url&rdquo; do material pretendido, neste caso das  armaduras dos personagens, estas n&atilde;o fazem parte do corpo principal do ficheiro  x3d, mas s&atilde;o <em>protos</em>. </p>
+  <p align="justify">No caso dos <em>protos</em>, depois de serem criadas as suas  instancias, estes passam a ser vis&iacute;veis juntamente com os restantes objectos  que j&aacute; faziam parte do corpo do ficheiro x3d, no entanto n&atilde;o &eacute; poss&iacute;vel aceder  ou modificar os seus campos se n&atilde;o forem feitas alguma altera&ccedil;&otilde;es na declara&ccedil;&atilde;o  do <em>proto</em>. </p>
+  <p align="justify">Estas altera&ccedil;&otilde;es  podem ser consulrtadas na sec&ccedil;&atilde;o &quot;acesso externo&quot; deste site. Depois destas altera&ccedil;&otilde;es feitas aos campos do <em>proto</em>, torna-se poss&iacute;vel aceder a estes  e modific&aacute;-los. </p>
+  <p align="justify">Ao aceder-se ao  ficheiro x3d para encontrar o nome do campo a modificar, deve-se fazer o <em>getField</em> &agrave; instancia do <em>proto</em>, procurando o nome da vari&aacute;vel  criada, referente ao campo do objecto que se pretende modificar, neste caso o  campo &ldquo;Tex_humano&rdquo; que se refere ao campo &ldquo;url&rdquo; da textura. </p>
+  <table width="448" border="1" align="center">
+    <tr>
+      <td><p>MFString textura; <br />
+        textura =  (MFString)instancia_armadura.getField(&quot;Tex_humano&quot;);<br />
+        String[]  val=new String[1]; <br />
+        val[0]=  (String)&quot;im1.jpg&quot;; <br />
+      textura.set1Value(0,val[0]);</p></td>
+    </tr>
+  </table>
+  <p align="justify">Desta maneira &eacute;  poss&iacute;vel modificar as texturas de todas as armaduras dos personagens.</p>
+  <p align="justify">&nbsp;</p>
+  <p align="justify" class="style1"><a name="varios_angulos" id="varios_angulos"></a><a name="_Toc121219783" id="_Toc121219783">Visualizar  as personagens em diferentes &acirc;ngulos</a></p>
+  <p align="justify">Nesta sec&ccedil;&atilde;o da  aplica&ccedil;&atilde;o &eacute; poss&iacute;vel visualizar a personagem de diferentes pontos de vista,  clicando no bot&atilde;o respectivo, ou rodar a personagem.</p>
+  <p align="center"><img src="imagens/projecto/rodar personagem.jpg" width="500" height="438" /></p>
+  <p align="justify">O que vai  acontecer nesta parte n&atilde;o &eacute; propriamente a rota&ccedil;&atilde;o da personagem, mas sim a  rota&ccedil;&atilde;o e transla&ccedil;&atilde;o da posi&ccedil;&atilde;o do <em>viewpoint</em>.<br />
+  Torna-se mais  vi&aacute;vel a rota&ccedil;&atilde;o do <em>viewpoint</em> do que  a rota&ccedil;&atilde;o do personagem, existiria a necessidade de rodar o corpo dos  personagens e ao mesmo tempo rodar as armaduras, devendo neste caso definir os  campos <em>rotation</em> e <em>translation</em> das armaduras como  acess&iacute;veis dentro dos <em>protos</em>.</p>
+  <p align="justify">Para todas as posi&ccedil;&otilde;es poss&iacute;veis &eacute; realizada  a mesma ac&ccedil;&atilde;o. Em primeiro lugar vai aceder-se ao ficheiro x3d do personagem e  localizar o objecto <em>Viewpoint</em> e os  seus campos <em>translation</em> e <em>rotation</em> que s&atilde;o os campos que  pretendemos modificar.</p>
+  <table width="438" border="1" align="center">
+    <tr>
+      <td><p>X3DNode View_Point_Grupo;<br />
+        SFVec3f translacaoX3D;<br />
+        SFRotation posicaoX3D;</p>
+        <p>View_Point_Grupo =  mainScene.getNamedNode(&quot;dad_Grupo_Viewpoint&quot;);<br />
+          translacaoX3D = (SFVec3f)  View_Point_Grupo.getField(&quot;translation&quot;);<br />
+      posicaoX3D = (SFRotation) View_Point_Grupo.getField(&quot;rotation&quot;); </p></td>
+    </tr>
+  </table>
+  <p align="justify">Seguidamente vai  atribuir-se os novos valores para os campos <em>translation</em> e <em>rotation</em> do <em>viewpoint</em>. Estes valores v&atilde;o ser diferentes dependendo da personagem  que se encontra activa e do tipo de vista seleccionado pelo utilizador.</p>
+  <table width="353" border="1" align="center">
+    <tr>
+      <td><p>//------------------------------------------rotacao<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; float  angulo=((float)1.634);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; float[] posicao =  {-1,0,0,angulo};<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  posicaoX3D.setValue(posicao);<br />
+        //---------------------------------------translacao<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; float x=((float)-.581);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; float y=((float)4.569);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; float z=((float)4.569);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; float[] translacao = {  x,y,z};<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; translacaoX3D.setValue(translacao);</p></td>
+    </tr>
+  </table>
+  <p align="justify">Em rela&ccedil;&atilde;o ao <em>scroll</em> que permite a rota&ccedil;&atilde;o da personagem vai acontecer a mesma  coisa, existe uma rota&ccedil;&atilde;o do <em>viewpoint</em>.  Em primeiro lugar vai colocar-se o <em>viwepoint</em> na posi&ccedil;&atilde;o original (<em>translation</em>) e  de seguida ler os valores da <em>JScrollBar</em> :</p>
+  <p align="justify">int val=Rodar_viewpoint.getValue();</p>
+  <p align="justify">Depois de se ter  os valores na vari&aacute;vel &ldquo;val&rdquo; vai atribuir-se estes valores ao campo <em>rotation</em> do <em>viewpoint </em>. Desta maneira de cada vez que o valor da <em>JScrollBar</em> mudar vai ser alterado o  valor do campo <em>rotation</em> do <em>viewpoint</em>, permitindo visualizar o  personagem de todos os &acirc;ngulos.</p>
+  <table width="319" border="1" align="center">
+    <tr>
+      <td><p>//--------------------------------&nbsp;  translacao<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; float y=((float).09043);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; float[] translacao = {  0,y,0};<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; translacaoX3D.setValue(translacao);<br />
+        //------------------------------- rotacao<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int  val=Rodar_viewpoint.getValue();<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.print(val);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; float[] posicao =  {0,1,0,val};<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; posicaoX3D.setValue(posicao);&nbsp; </p></td>
+    </tr>
+  </table>
+  <p align="justify">&nbsp;</p>
+  <p align="justify" class="style1"> <a name="caracteristicas" id="caracteristicas"></a>Caracter&iacute;sticas da personagem  escolhida</p>
+  <p align="justify">Neste menu  poderemos ver quais as caracter&iacute;sticas iniciais de cada um dos personagens.  Cada personagem possui as suas caracter&iacute;sticas pr&oacute;prias de acordo com a sua  ra&ccedil;a. Estas caracter&iacute;stica podem se desenvolvidas durante o jogo.<br />
+  &nbsp; &nbsp;&nbsp;&nbsp;<br />
+    Depois de  seleccionada a personagem dos valores das suas caracter&iacute;sticas terem sido  especificadas automaticamente, &eacute; poss&iacute;vel visualizar essas caracter&iacute;sticas  seleccionando o menu &ldquo;caracter&iacute;sticas&rdquo;.</p>
+  <p align="justify">Ao clicar-se  neste menu vai desenrolar-se um evento <em>statChanged</em> deste menu, que vai atribuir os valores das caracter&iacute;sticas &agrave;s respectivas  caixas de texto, funcionando como uma esp&eacute;cie de <em>refresh</em>.</p>
+  <table width="446" border="1" align="center">
+    <tr>
+      <td><p>&nbsp; classe_txt.setText(classe);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; raca_txt.setText(raca);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String XP_string = new  Integer(XP).toString(); <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  experiencia_txt.setText(XP_string);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String HP_string = new  Integer(HP).toString(); <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  vida_txt.setText(HP_string);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &hellip;<br />
+  &nbsp; &hellip;</p></td>
+    </tr>
+  </table>
+  <p align="justify">&nbsp;Assim o  utilizador pode escolher a personagem baseando-se tamb&eacute;m nas suas  caracter&iacute;sticas. </p>
+  <p align="justify">Tamb&eacute;m neste  &uacute;ltimo menu das caracter&iacute;sticas o jogador dever&aacute; escolher o seu nome para o  personagem e em seguida clicar no bot&atilde;o &ldquo;iniciar aventura&rdquo;, para come&ccedil;ar o jogo  propriamente dito.</p>
+  <p align="justify">&nbsp;</p>
+  <p align="justify" class="style1">&nbsp;<a name="iniciar_jogo" id="iniciar_jogo"></a>Iniciar jogo</p>
+  <p align="justify">Como foi  referido, o projecto encontra-se dividido em duas aplica&ccedil;&otilde;es Java, a primeira  que contem todos os processos para a selec&ccedil;&atilde;o da personagem e a segunda que &eacute; o  jogo propriamente dito. Ao clicar no bot&atilde;o &ldquo;iniciar aventura&rdquo;, vai haver uma  passagem da primeira aplica&ccedil;&atilde;o Java para a segunda aplica&ccedil;&atilde;o, enviando todos os  par&acirc;metros necess&aacute;rios de maneira a manter a personagem seleccionada pelo  utilizador, assim como todas as suas caracter&iacute;sticas. O m&eacute;todo utilizado para  passar de uma aplica&ccedil;&atilde;o para outra pode ver-se a seguir.
+  </p>
+  <table width="382" border="1" align="center">
+    <tr>
+      <td><p>&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;//executar a aplica&ccedil;ao do  jogo propriamente dito<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; new Jogo().setVisible(true);<br />
+  &nbsp;&nbsp; // fechar a aplica&ccedil;&atilde;o da selec&ccedil;&atilde;o da  personagem<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.dispose();</p></td>
+    </tr>
+  </table>
+  <p align="justify">Desta maneira &eacute;  executada a classe Jogo, colocando-a vis&iacute;vel. Basta simplesmente fazer isto na  medida que ambas as aplica&ccedil;&otilde;es se encontram na mesma directoria. De modo a  libertar os recursos usados pela primeira aplica&ccedil;&atilde;o, que agora j&aacute; n&atilde;o &eacute;  necess&aacute;ria, procedeu-se ao seu encerramento atrav&eacute;s do m&eacute;todo <em>dispose</em>.</p>
+  <p align="justify">O m&eacute;todo  utilizado para passar as vari&aacute;veis das caracter&iacute;sticas da personagem escolhida  foi o seguinte: Criou-se uma classe Java denominada de &ldquo;Vari&aacute;veis.class&rdquo;, para  onde foram enviadas todas as vari&aacute;veis que s&atilde;o necess&aacute;rias passar para a  aplica&ccedil;&atilde;o Jogo. Esta passagem de par&acirc;metros vai ser efectuado aquando da  selec&ccedil;&atilde;o da op&ccedil;&atilde;o &ldquo;Iniciar aventura&quot;.</p>
+  <table width="200" border="1" align="center">
+    <tr>
+      <td><p>valores.setX(personagem);<br />
+        valores.setIMAGEM_PERSONAGEM(imagem_personagem);<br />
+        valores.setNOME(nome_txt.getText());<br />
+        valores.setRACA(raca);<br />
+  &hellip;<br />
+  &hellip;<br />
+        valores.setINT(INT);<br />
+        valores.setCOR_MAO(cor_mao);<br />
+  &hellip;<br />
+      Variaveis valores = new  Variaveis();</p></td>
+    </tr>
+  </table>
+  <p align="justify">Para alem das  caracter&iacute;sticas da personagem seleccionada vai tamb&eacute;m ser enviado o nome  atribu&iacute;do pelo utilizador, qual a personagem escolhida, qual a imagem da  personagem escolhida e a cor de pele escolhida pelo utilizador aquando da  personaliza&ccedil;&atilde;o da personagem.</p>
+  <p align="justify">Estes valores  v&atilde;o ser recebidos na classe Java &ldquo;Vari&aacute;veis.class&rdquo;. Pode-se ver de seguida o  caso da caracter&iacute;stica &ldquo;intelig&ecirc;ncia&rdquo; da personagem.</p>
+  <table width="319" border="1" align="center">
+    <tr>
+      <td><p>private static int var_INT;</p>
+        <p>public static int getINT() {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return var_INT;<br />
+  &nbsp;&nbsp;&nbsp; }<br />
+          public static void setINT(int x_var_INT) {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var_INT = x_var_INT;<br />
+      }</p></td>
+    </tr>
+  </table>
+  <p align="justify">Este valor &eacute; de  seguida enviado para a aplica&ccedil;&atilde;o &ldquo;Jogo.class&rdquo; que vai receber todos os valores  das caracter&iacute;sticas das personagens e atribui-los &agrave;s vari&aacute;veis correspondentes.</p>
+  <table width="281" border="1" align="center">
+    <tr>
+      <td width="316"><p>&hellip;<br />
+  &hellip;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; XP=valores.getXP();<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HP=valores.getHP();<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MANA=valores.getMANA();<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DEX=valores.getDEX();<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; STR=valores.getSTR();<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CONS=valores.getCONS();<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; INT=valores.getINT();<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cor_mao=valores.getCOR_MAO();<br />
+  &hellip;<br />
+  &hellip;</p></td>
+    </tr>
+  </table>
+  <p align="justify">Em rela&ccedil;&atilde;o aos  valores das caracter&iacute;sticas do personagem, v&atilde;o ser atribu&iacute;dos &agrave;s vari&aacute;veis  respectivas de maneira a mais tarde serem utilizados nas lutas e nas v&aacute;rias  actividades que exijam um certo n&iacute;vel de capacidades do jogador.</p>
+  <p align="justify">Em rela&ccedil;&atilde;o &agrave; cor  do corpo, esta vai ser atribu&iacute;da &agrave; &ldquo;m&atilde;o&rdquo; do personagem que se pode ver durante  a navega&ccedil;&atilde;o no mundo virtual.</p>
+  <p align="justify">Para atribuir a  cor ao objecto m&atilde;o vai ler-se a vari&aacute;vel <em>cor_mao,</em> que contem um <em>array</em> com os tr&ecirc;s  valores RGB da cor escolhida para o personagem pelo utilizador, ou ent&atilde;o a cor  original da personagem. Depois disto esta cor vai ser atribu&iacute;da ao campo <em>diffusecolor</em> do objecto que representa a  m&atilde;o do jogador.
+  </p>
+  <table width="510" border="1" align="center">
+    <tr>
+      <td><p>X3DNode mao_personagem =  mainScene.getNamedNode(&quot;White1_mat&quot;);<br />
+        SFColor cor_mao_personagem = (SFColor)  mao_personagem .getField(&quot;diffuseColor&quot;);<br />
+      cor_mao_personagem.setValue(cor_mao);</p></td>
+    </tr>
+  </table>
+  <p align="justify">Desta maneira  vai ser iniciado o jogo propriamente dito, onde as caracter&iacute;sticas do  personagem que foram escolhidas na selec&ccedil;&atilde;o do personagem v&atilde;o ser adaptadas ao  jogador. Algumas delas n&atilde;o v&atilde;o influenciar o desenrolar da hist&oacute;ria, como por  exemplo o nome do personagem ou a cor da sua pele. Por outro lado existem  outras que a v&atilde;o influenciar, como a sua habilidade para roubar, ou a for&ccedil;a  f&iacute;sica da personagem.</p>
+  <p align="justify">Pode ver-se na figura seguinte o resultado da passagem dos par&acirc;metros da classe  &ldquo;Personagem&rdquo;, para a classe &ldquo;Jogo&rdquo;. Neste caso a personagem escolhida tinha  sido o &ldquo;Goblin&rdquo;. A cor da m&atilde;o &eacute; a cor seleccionada para este personagem, que  foi verde. Pode ver-se tamb&eacute;m a imagem da personagem seleccionada, assim como  todas as suas caracter&iacute;sticas. Tamb&eacute;m o nome seleccionado para a personagem &eacute;  passado para esta classe.</p>
+  <p align="center"><img src="imagens/projecto/cor mao.jpg" width="500" height="475" /></p>
+  <p align="justify">Nesta parte do  projecto surgiu no entanto um pequeno problema, quando se efectuava a passagem  da primeira parte do jogo (selec&ccedil;&atilde;o da personagem) para a segunda parte (jogo)  esta segunda parte ficava muito lenta e inst&aacute;vel. Isto acontecia devido ao  facto de os recursos utilizados para executar o browser e a primeira cena n&atilde;o  terem sido libertados, apesar de se fazer o &ldquo;dispose&rdquo; da primeira classe ( <em>this.dispose(); </em>) aquando da passagem para o jogo  propriamente dito.</p>
+  <p align="justify">Para tentar  solucionar este problema foi feito tamb&eacute;m o dispose do pr&oacute;prio browser que  tinha sido criado para albergar a cena X3D ( <em>x3dBrowser.dispose(); </em>). No entanto apesar de parecer ter-se  alcan&ccedil;ado a solu&ccedil;&atilde;o, esta ainda n&atilde;o tinha sido encontrada pois a segunda parte  do jogo continuava lenta. &nbsp;</p>
+  <p align="justify">A solu&ccedil;&atilde;o passou  pela utiliza&ccedil;&atilde;o de uma inst&acirc;ncia do primeiro <em>browser</em> criado para a primeira cena X3D na segunda cena X3D. Ou  seja, ouve uma reutiliza&ccedil;&atilde;o do mesmo <em>browser</em> para as duas cenas nas duas classes diferentes, em vez de se proceder &agrave;  elimina&ccedil;&atilde;o do primeiro <em>browser</em> e da  cria&ccedil;&atilde;o do segundo para a segunda cena.</p>
+  <p align="justify">O <em>browser</em> X3D &eacute; criado na primeira classe  e depois de utilizado &eacute; passado para a segunda classe. Na segunda classe vai  usar-se este <em>browser</em>, substituindo a  cena contida no <em>browser</em> pela segunda  cena (jogo). Desta maneira vai poupar-se tempo pois vai evita-se a cria&ccedil;&atilde;o de  um novo browser X3D. Para al&eacute;m disto vai resolver-se o problema em que o jogo  ficava lendo, pois &eacute; utilizado apenas um &uacute;nico <em>browser</em> para as duas cenas. </p>
+  <p align="justify">&nbsp;</p>
+  <p align="justify" class="style1"><a name="imagens" id="imagens"></a>Imagens Jogo </p>
+  <p align="center">Podem ver-se a seguir algumas imagens do jogo propriamente dito, a seguir &agrave; selec&ccedil;&atilde;o da personagem.</p>
+  <p align="center"><img src="imagens/projecto/4.jpg" width="500" height="474" /></p>
+  <p align="center"><img src="imagens/projecto/3.jpg" width="500" height="476" /></p>
+  <p align="center"><img src="imagens/projecto/2.jpg" width="500" height="476" /></p>
+  <p align="center"><img src="imagens/projecto/1.jpg" width="500" height="477" /></p>
+  <p align="justify">&nbsp;</p>
+</div>
+</body>
+</html>

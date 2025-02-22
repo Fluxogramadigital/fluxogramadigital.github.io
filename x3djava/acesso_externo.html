@@ -1,0 +1,439 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Untitled Document</title>
+<style type="text/css">
+<!--
+#Layer1 {
+	position:absolute;
+	left:7px;
+	top:0;
+	width:656px;
+	height:398px;
+	z-index:1;
+}
+.style1 {
+	font-size: 18px;
+	font-weight: bold;
+}
+a:link {
+	color: #003399;
+}
+a:visited {
+	color: #003399;
+}
+a:active {
+	color: #003399;
+}
+a:hover {
+	color: #990000;
+}
+-->
+</style>
+</head>
+
+<body>
+<div id="Layer1">
+  <div align="justify">
+    <p align="justify" class="style1"><a name="_Toc123541547" id="_Toc123541547">Acesso  externo</a></p>
+    <p align="justify">Este tipo de  acesso &eacute; &uacute;til quando se pretende uma aplica&ccedil;&atilde;o composta por duas janelas, uma  janela referente &agrave; cena 3D e outra referente ao interface Java. </p>
+    <p align="justify">Neste tipo de  acesso externo, a classe Java vai criar uma janela 3D e, de seguida, vai  carregar a cena X3D para a janela 3D criada. Neste tipo de acesso &eacute; a pr&oacute;pria aplica&ccedil;&atilde;o Java que  vai carregar o ficheiro X3D. Este modo de  acesso &eacute; diferente do m&eacute;todo de acesso interno. Enquanto que no acesso interno  era o ficheiro X3D que ia chamar a classe Java, neste caso &eacute; a classe Java que  vai carregar o ficheiro X3D. </p>
+    <p align="justify"><a href="#filosofia">Filosofia de programação</a></p>
+    <p align="justify"><a href="#ex1">Enviar eventos para a cena X3D</a></p>
+    <p align="justify"><a href="#ex2">Receber eventos da cena X3D</a></p>
+    <p align="justify"><a href="#ex3">Diferenciar o objecto clicado</a></p>
+    <p align="justify"><a href="#ex4">Modificar as coordenadas de um objecto da cena X3D (translação</a>) </p>
+    <p align="justify"><a href="#ex5">Modificar a orientação de um objecto da cena X3D (rotação)</a></p>
+    <p align="justify"><a href="#ex6">Modificar a textura de um objecto</a></p>
+    <p align="justify"><a href="#ex7">Mudar o viewpoint do utilizador</a></p>
+    <p align="justify"><a href="#ex8">Criar nós </a></p>
+    <p align="justify"><a href="#ex9">Adicionar uma route </a></p>
+    <p align="justify"><a href="#ex10">Protótipos</a></p>
+    <p align="justify"><a href="#ex11">Activar um som</a></p>
+    <p align="justify">&nbsp;</p>
+    <p align="justify">_______________________________________</p>
+    <p align="justify">&nbsp;</p>
+    <p align="justify" class="style1"><a name="filosofia" id="filosofia"></a><a name="_Toc123541548" id="_Toc123541548">Filosofia da  programa&ccedil;&atilde;o</a></p>
+    <p align="justify">Para carregar  uma cena X3D para a aplica&ccedil;&atilde;o Java &eacute; necess&aacute;rio, em primeiro lugar, importar o &nbsp;<em>package  org.web3d.x3d.sai</em>, necess&aacute;rio para executar o SAI.</p>
+    <table width="200" border="1" align="center">
+      <tr>
+        <td><p>import  org.web3d.x3d.sai.*;</p></td>
+      </tr>
+    </table>
+    <p align="justify">    O passo seguinte  &eacute; carregar a cena x3d. Para isso, na aplica&ccedil;&atilde;o Java vai ser criado um  componente que vai servir de browser X3D.</p>
+    <table width="599" border="1" align="center">
+      <tr>
+        <td><p>X3DComponent x3dComp  =BrowserFactory.createX3DComponent(requestedParameters);</p></td>
+      </tr>
+    </table>
+    <p align="justify">Seguidamente &eacute; adicionada uma janela 3D &agrave;  aplica&ccedil;&atilde;o Java, criando um componente X3D usando a classe <em>SAI BrowserFactory.</em></p>
+    <table width="496" border="1" align="center">
+      <tr>
+        <td><p>//  Adicionar o componente ao interface<br />
+          JComponent  x3dPanel = (JComponent)x3dComp.getImplementation();<br />
+        contentPane.add(x3dPanel,  BorderLayout.CENTER);</p></td>
+      </tr>
+    </table>
+    <p align="justify">&nbsp;Neste momento  est&aacute; criada uma janela 3D na aplica&ccedil;&atilde;o. O passo seguinte consiste em carregar a  cena X3D. Para tal &eacute; necess&aacute;rio aceder ao browser. Um browser em SAI &eacute; um interface que permite a  interac&ccedil;&atilde;o com a cena.    </p>
+    <table width="374" border="1" align="center">
+      <tr>
+        <td><p>ExternalBrowser  x3dBrowser = x3dComp.getBrowser();</p></td>
+      </tr>
+    </table>
+    <p align="justify">O passo seguinte &eacute; carregar a cena para  dentro do browser. A vari&aacute;vel <em>mainScene</em> est&aacute; definida como sendo a cena principal. Este m&eacute;todo devolve um objecto X3D  que tem encapsulada a cena X3D. Deve-se especificar o ficheiro X3D que  pretendemos carregar, assim como a sua localiza&ccedil;&atilde;o se este ficheiro n&atilde;o se  encontrar na mesma directoria que a aplica&ccedil;&atilde;o Java</p>
+    <table width="200" border="1" align="center">
+      <tr>
+        <td><pre>X3DScene mainScene = x3dBrowser.createX3DFromURL(new String[] { &quot;ficheiro.x3d&quot; });</pre></td>
+      </tr>
+    </table>
+    <p>Falta agora  substituir a cena actual pela cena carregada. 
+    </p>
+    <table width="200" border="1" align="center">
+      <tr>
+        <td><pre>x3dBrowser.replaceWorld(mainScene);</pre></td>
+      </tr>
+    </table>
+    <p align="justify">Depois de  carregada a cena X3D j&aacute; &eacute; poss&iacute;vel atrav&eacute;s do Java manipular todos os objectos  que fazem parte desta cena, enviando e recebendo eventos. </p>
+    <p align="justify">Pode ver-se na figura seguinte uma representa&ccedil;&atilde;o da filosofia do acesso externo.</p>
+    <p align="center"><img src="imagens/acesso_externo/acesso_externo_clip_image001.jpg" width="500" height="300" /> </p>
+    <p align="justify">Tal como na sec&ccedil;&atilde;o do  acesso interno, tamb&eacute;m aqui se vai fazer refer&ecirc;ncia a alguns exemplos, de  maneira a haver uma melhor percep&ccedil;&atilde;o da implementa&ccedil;&atilde;o do acesso externo.</p>
+    <p align="justify">&nbsp;</p>
+    <p align="justify"><a name="_Toc121219757" id="_Toc121219757"></a><span class="style1"><a name="ex1" id="ex1"></a>Exemplo 1 - Enviar eventos para a cena X3D</span></p>
+    <p align="justify">Neste exemplo  vai encontrar-se o material definido como &ldquo;MAT&rdquo; na cena X3D e vai mudar-se a  sua cor para azul. Pode ver-se na a seguir um excerto do ficheiro que cont&eacute;m este objecto e a  forma como este est&aacute; declarado.</p>
+    <table width="221" border="1" align="center">
+      <tr>
+        <td><p>&hellip;<br />
+  &hellip;<br />
+  &nbsp;&nbsp; &lt;Shape DEF='Box1'&gt;<br />
+  &nbsp; &nbsp;&nbsp;&lt;Appearance&gt;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; &lt;Material DEF='MAT' <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ambientIntensity='0.200'<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; shininess='0.200'<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; diffuseColor='1 0 0'<br />
+  &hellip;<br />
+  &hellip; </p></td>
+      </tr>
+    </table>
+    <p align="justify">&nbsp;Pode observar-se  que o material do objecto est&aacute; definido com o nome MAT e que o campo que guarda  a cor deste objecto &eacute; o <em>diffusecolor</em>.  Este campo possui o valor 1 0 0 (vermelho). O objectivo &eacute; passar este valor  para 0 0 1 (azul).</p>
+    <p align="justify">A primeira coisa a fazer &eacute; encontrar na cena  o n&oacute; chamado &ldquo;MAT&rdquo;. O m&eacute;todo <em>getNamedNode </em>vai procurar o n&oacute; pretendido na cena principal e guard&aacute;-lo na vari&aacute;vel  material. Se este n&oacute; n&atilde;o for encontrado o valor retornado  ser&aacute; <em>null</em>. </p>
+    <table width="396" border="1" align="center">
+      <tr>
+        <td><p>X3DNode material =  mainScene.getNamedNode(&quot;MAT&quot;);<br />
+          if (material == null) {<br />
+          System.out.println(&quot;n&atilde;o foi possivel encontrar o material:  MAT&quot;);<br />
+          return;<br />
+        }</p></td>
+      </tr>
+    </table>
+    <p align="justify">Depois de ter o n&oacute; pretendido &eacute; necess&aacute;rio  encontrar o campo <em>diffuseColor </em>e  mudar o seu valor. Para tal vai usar-se o m&eacute;todo <em>getField</em><strong>. </strong></p>
+    <table width="383" border="1" align="center">
+      <tr>
+        <td><p>SFColor cor = (SFColor) material.getField(&quot;diffuseColor&quot;);</p></td>
+      </tr>
+    </table>
+    <p align="justify">Uma vez que j&aacute;  se encontrou o campo pretendido pode-se agora mudar o seu valor. O novo valor  deve ser do mesmo tipo do campo que pretendemos alterar. Sendo este campo um <em>SFColor</em>, tem de se utilizar uma vari&aacute;vel <em>float</em>. Para tal cria-se uma vari&aacute;vel  com o nome de <em>azul</em>, e atribuir-se o  respectivo valor (0 0 1), atrav&eacute;s do m&eacute;todo <em>setValue</em>.    </p>
+    <table width="161" border="1" align="center">
+      <tr>
+        <td><p>float[]azul = {0,0,1};<br />
+        cor.setValue(azul);</p></td>
+      </tr>
+    </table>
+    <p align="justify">Neste momento o  campo <em>diffuseColor </em>do n&oacute; MAT passou  de vermelho para azul.</p>
+    <p align="justify">&nbsp;</p>
+    <p align="justify" class="style1"><a name="ex2" id="ex2"></a><a name="_Toc123541550" id="_Toc123541550">Exemplo 2 &ndash; Receber eventos da cena X3D</a></p>
+    <p align="justify">Uma aplica&ccedil;&atilde;o  usando o SAI pode escutar por mudan&ccedil;as em qualquer campo X3D. Isto permite &agrave;  aplica&ccedil;&atilde;o reagir em resposta a uma mudan&ccedil;a que aconteceu no mundo X3D. Por  exemplo, pode definir-se o programa para esperar que um sensor de toque seja  activado, ou o avatar entre dentro de um sensor de proximidade, ou uma anima&ccedil;&atilde;o  chegue ao seu &uacute;ltimo <em>frame</em> e quando  isto aconte&ccedil;a executar uma determinada ac&ccedil;&atilde;o.</p>
+    <p align="justify">&nbsp;No exemplo que se vai usar, existe uma bola  que possui um sensor de toque. Pretende-se que a aplica&ccedil;&atilde;o reaja quando o  utilizador pressione neste sensor e envie para a consola uma mensagem a dizer  que a bola foi pressionada.</p>
+    <p align="justify">Existe um n&oacute; <em>dad_Sphere1</em>, que est&aacute; dentro de um grupo <em>dad_Group1. </em>Neste grupo existe tamb&eacute;m  um sensor de toque (<em>Sensor1</em>). Devido  ao facto de o sensor de toque estar dentro do mesmo grupo do n&oacute; <em>dad_Sphere1, </em>estes dois n&oacute; v&atilde;o estar  interligados.</p>
+    <p align="justify">Vai usar-se para  este exemplo o m&eacute;todo <em>addX3DEventListener,</em> que vai fazer com que a aplica&ccedil;&atilde;o esteja constantemente a escutar por  altera&ccedil;&otilde;es no campo pretendido do n&oacute; escolhido, que neste caso ser&aacute; o <em>touchTime</em> do n&oacute; <em>Sensor1</em>.</p>
+    <p align="justify">&Eacute; tamb&eacute;m  necess&aacute;rio implementar o interface <em>X3DFieldEventListener,</em> na defini&ccedil;&atilde;o da classe Java. Nesta fun&ccedil;&atilde;o v&atilde;o existir as ac&ccedil;&otilde;es a executar  quando se detectar um evento no m&eacute;todo <em>addX3DEventListener. </em></p>
+    <p align="justify">Tal como foi  feito para os exemplos anteriores, vai carregar-se o ficheiro X3D e  seguidamente procurar o n&oacute; sensor de toque e o campo <em>touchTime.</em>    </p>
+    <table width="504" border="1" align="center">
+      <tr>
+        <td><p>X3DScene mainScene = <br />
+          x3dBrowser.createX3DFromURL(new String[] { &quot;bola.x3d&quot; });<br />
+          x3dBrowser.replaceWorld(mainScene);<br />
+          X3DNode touch  = mainScene.getNamedNode(&quot;TOUCH_SENSOR&quot;);<br />
+        SFTime ttime  = (SFTime) touch.getField(&quot;touchTime&quot;);</p></td>
+      </tr>
+    </table>
+    <p align="justify">  Agora que j&aacute;  temos o campo pretendido, basta utilizar o m&eacute;todo <em>addX3DEventListener </em>e aplic&aacute;-lo a este campo. Desta maneira, quando  houver altera&ccedil;&otilde;es no campo<em> touchTime</em> contido na vari&aacute;vel <em>ttime, </em>ser&atilde;o  executadas as ac&ccedil;&otilde;es contidas na fun&ccedil;&atilde;o <em>readableFieldChanged</em><em>.</em></p>
+    <table width="379" border="1" align="center">
+      <tr>
+        <td><p>ttime.addX3DEventListener(this); <br />
+          public void  readableFieldChanged(X3DFieldEvent evt) {<br />
+  &nbsp;&nbsp;&nbsp;  &nbsp;System.out.println(&quot;A esfera  acaba de ser clicada&quot;);<br />
+  &nbsp;&nbsp;&nbsp; }</p></td>
+      </tr>
+    </table>
+    <p align="justify">Este &eacute; um  exemplo relativamente simples da aplica&ccedil;&atilde;o desta t&eacute;cnica, por&eacute;m ela possui  muitas outras potencialidades, devido ao facto de se poder escutar altera&ccedil;&otilde;es  de todos os campos de todos os n&oacute;s X3D e executar as mais variadas ac&ccedil;&otilde;es  quando acontecem altera&ccedil;&otilde;es dos valores respectivos. </p>
+    <p>Uma utiliza&ccedil;&atilde;o  bastante &uacute;til &eacute; a verifica&ccedil;&atilde;o de qual dos objectos presentes numa cena foi  clicado. No entanto para isso &eacute; necess&aacute;rio tamb&eacute;m ter em considera&ccedil;&atilde;o outros  factores que se v&atilde;o referir no seguinte exemplo.</p>
+    <p align="justify">&nbsp;</p>
+    <p align="justify" class="style1"><a name="ex3" id="ex3"></a><a name="_Toc124074685">Exemplo  3 - Diferenciar o objecto clicado</a></p>
+    <p align="justify">Um problema  bastante comum &eacute; quando existem v&aacute;rios objectos numa cena 3D e se pretende  saber em qual o utilizador clicou. Pode, por exemplo, pretender-se mudar as  caracter&iacute;sticas de qualquer de um destes objectos (a cor por exemplo). A  selec&ccedil;&atilde;o deste objecto deve ser feita atrav&eacute;s do clique do rato, tendo em conta  que cada objecto possui o seu pr&oacute;prio sensor de toque. </p>
+    <p align="justify">Se se tiver em  conta o que foi explicado na sec&ccedil;&atilde;o anterior, o que se faria seria aplicar o  m&eacute;todo <em>addX3DEventListener </em>a cada  objecto, para detectar quando o seu sensor de toque tinha sido clicado. Na  fun&ccedil;&atilde;o <em>readableFieldChanged </em>ter&iacute;amos  a ac&ccedil;&atilde;o necess&aacute;ria para modificar, por exemplo, a cor do objecto. </p>
+    <p align="justify">No entanto, tem  de se pensar num processo para diferenciar qual o objecto que foi clicado, e  diferenciar as ac&ccedil;&otilde;es a tomar dentro da fun&ccedil;&atilde;o <em>readableFieldChanged</em> (uma ac&ccedil;&atilde;o para cada objecto). </p>
+    <p align="justify">Tal como no  exemplo anterior vai associar-se o m&eacute;todo <em>addX3DEventListener </em>ao campo <em>touchTime</em>&nbsp; de cada sensor de toque de cada objecto<em>.</em>
+    </p>
+    <table width="415" border="1" align="center">
+      <tr>
+        <td><p>//sensor de toque do  objecto 1<br />
+          SFTime ttime1 = (SFTime) touch1.getField(&quot;touchTime&quot;);<br />
+          ttime1.addX3DEventListener(this); </p>
+          <p>//sensor de toque do  objecto 2<br />
+            SFTime ttime2 = (SFTime) touch2.getField(&quot;touchTime&quot;);<br />
+        ttime2.addX3DEventListener(this); </p></td>
+      </tr>
+    </table>
+    <p align="justify">Desta maneira,  cada vez que houver uma altera&ccedil;&atilde;o no campo <em>touchTime </em>de cada um dos sensores, ir&atilde;o ser feitas as ac&ccedil;&otilde;es existentes na fun&ccedil;&atilde;o <em>readableFieldChanged, </em>no entanto n&atilde;o h&aacute;  distin&ccedil;&atilde;o sobre qual foi o objecto clicado.</p>
+    <p align="justify">Para que tal  aconte&ccedil;a, &eacute; necess&aacute;rio definir duas novas vari&aacute;veis que v&atilde;o servir de controlo. Estas vari&aacute;veis v&atilde;o servir como forma de controlar  mais tarde na fun&ccedil;&atilde;o <em>readableFieldChanged, </em>qual o objecto clicado. Ent&atilde;o &eacute; necess&aacute;rio utilizar o m&eacute;todo <em>setUserData</em> e associar estas vari&aacute;veis  ao <em>touchTime</em> do sensor que  pretendemos identificar. Neste exemplo, quando for gerado O <em>touchTime</em> do sensor 1 vai ser enviado o  objecto <em>EVENT1</em>, e quando for gerado o <em>touchTime</em> do sensor 2 &eacute; enviado o  objecto <em>EVENT2.</em></p>
+    <table width="342" border="1" align="center">
+      <tr>
+        <td><p>public static final Object EVENT1 = new Integer(0);<br />
+          public static final Object EVENT2 = new Integer(1);<br />
+          ..<br />
+          ttime1.setUserData(EVENT1); //ttime1-&gt;event1=0<br />
+        ttime2.setUserData(EVENT2); //ttime2-&gt;event2=1</p></td>
+      </tr>
+    </table>
+    <p align="justify">Desta maneira existe  um valor associado a um determinado objecto, que se vai enviar para a fun&ccedil;&atilde;o <em>readableFieldChanged. </em>Nesta fun&ccedil;&atilde;o vai  desencapsular-se o objecto enviado e guard&aacute;-lo na vari&aacute;vel <em>udata</em>.
+    </p>
+    <table width="368" border="1" align="center">
+      <tr>
+        <td><p>&nbsp; public void readableFieldChanged(X3DFieldEvent evt) {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Object udata = evt.getData(); <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (udata == EVENT1){<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(&quot;objecto 1  clicado&quot;);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sensor=1;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else if (udata ==  EVENT2){<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  System.out.println(&quot;objecto 2 clicdo&quot;);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sensor=2;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br />
+  &nbsp;&nbsp;&nbsp; }</p></td>
+      </tr>
+    </table>
+    <p align="justify">Pode ver-se, no  c&oacute;digo, que se o valor da vari&aacute;vel <em>udata</em> for igual ao EVENT1 (0), fica-se a saber que foi clicado o sensor do objecto 1.  Se por outro lado o valor da vari&aacute;vel <em>udata</em> for igual ao valor do objecto EVENT2 (1) ent&atilde;o o sensor que foi clicado foi o  sensor do objecto 2. Atrav&eacute;s deste processo &eacute; poss&iacute;vel distinguir qual o  objecto de uma cena que foi clicado e fazer a sua distin&ccedil;&atilde;o na fun&ccedil;&atilde;o <em>readableFieldChanged</em>.</p>
+    <p align="justify">&nbsp;</p>
+    <p class="style1"><a name="ex4" id="ex4"></a>Exemplo 4 - Modificar as coordenadas de  um objecto na cena X3D (transla&ccedil;&atilde;o)</p>
+    <p>Neste exemplo  vai procurar-se na cena X3D um objecto de nome &ldquo;dad_Box1&rdquo; e mudar as suas  coordenadas. Para modificar as coordenadas do objecto &eacute; necess&aacute;rio alterar os  valores do campo <em>translation</em>. Tal como no  exemplo anterior tamb&eacute;m aqui teremos de aceder a um campo de um n&oacute; e alterar os  seus valores. </p>
+    <p>Depois de  encontrado o n&oacute; pretendido (dad_Box1) e o campo a alterar (<em>translation</em>), vai proceder-se &agrave; sua altera&ccedil;&atilde;o.Ser&aacute; definida  uma vari&aacute;vel com as novas coordenadas.De seguida procede-se &agrave; atribui&ccedil;&atilde;o destes  novos valores ao campo respectivo. Desta maneira,  com estes novos valores do campo <em>translation</em>,  o objecto vai deslocar-se da posi&ccedil;&atilde;o original para a posi&ccedil;&atilde;o final (2 0 2).</p>
+    <table width="464" border="1" align="center">
+      <tr>
+        <td><p>X3DNode objecto =  mainScene.getNamedNode(&quot;dad_Box1&quot;);<br />
+          SFVec3f posicao = (SFVec3f)  objecto.getField(&quot;translation&quot;);<br />
+          float[] posicao_nova = {2 0 2 };<br />
+        posicao.setValue(posicao_nova);</p></td>
+      </tr>
+    </table>
+    <p>&nbsp;</p>
+    <p class="style1"><a name="ex5" id="ex5"></a><a name="_Toc121219759" id="_Toc121219759">Exemplo 5 -  Modificar  a orienta&ccedil;&atilde;o de um objecto na cena x3d (rota&ccedil;&atilde;o)</a></p>
+    <p>Este exemplo &eacute; bastante parecido com o  anterior, mudando o facto de em vez de se alterar o campo <em>translation, </em>se altere o campo <em>rotation. </em>Assim e tendo como base o mesmo exemplo do objecto x3d vai localizar-se o  n&oacute; pretendido, ou seja, o &ldquo;dad_Box1&rdquo; e de seguida procurar o campo a alterar (<em>rotation). </em>De seguida procede-se &agrave;  altera&ccedil;&atilde;o para os valores pretendidos, como se pode ver a seguir. </p>
+    <table width="363" border="1" align="center">
+      <tr>
+        <td><p>X3DNode objecto =  mainScene.getNamedNode(&quot;dad_Box1&quot;);<br />
+          SFRotation orientacao =  (SFRotation) objecto.getField(&quot;rotation &quot;);<br />
+          float[] orientacao_nova = {0,1,0,90};<br />
+          orientacao.setValue(orientacao_nova);</p></td>
+      </tr>
+    </table>
+    <p>Existe um  pormenor que &eacute; necess&aacute;rio real&ccedil;ar. S&atilde;o quatro os valores contidos no campo <em>rotation, </em>sendo os tr&ecirc;s primeiros a  orienta&ccedil;&atilde;o segundo a qual o objecto vai rodar, ou seja, x, y ou z. O quarto  valor &eacute; o &acirc;ngulo em graus da rota&ccedil;&atilde;o pretendida. Neste caso espec&iacute;fico, o  objecto vai rodar segundo o eixo dos y, 90 graus.</p>
+    <p class="style1">&nbsp;</p>
+    <p class="style1"><a name="ex6" id="ex6"></a><a name="_Toc121219760" id="_Toc121219760">Exemplo 6 - Modificar  a textura de um objecto</a></p>
+    <p>Neste exemplo  vai proceder-se &agrave; altera&ccedil;&atilde;o da textura de um objecto de uma cena X3D. De seguida pode ver-se o codigo referente a um objecto X3D com uma  textura aplicada.    </p>
+    <table width="322" border="1" align="center">
+      <tr>
+        <td><p>&hellip;<br />
+  &hellip;<br />
+  &nbsp;&nbsp;&nbsp; &lt;Shape DEF='Box1'&gt;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;Appearance&gt;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;ImageTexture DEF=&rsquo;tex&rsquo; url='&quot;metal1.jpg&quot;'/&gt;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; &lt;Material DEF='Red_mat'<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &hellip;<br />
+  &hellip;</p></td>
+      </tr>
+    </table>
+    <p>Para alterar esta textura basta aceder ao campo <em>ImageTexture</em> definido por <em>tex </em>e ao campo <em>url, </em>alterando de seguida o seu valor. </p>
+    <p>Tem de se definir  uma vari&aacute;vel para guardar o <em>array</em> que  vai definir o caminho para a nova imagem que vai constituir a textura, pois o  campo url de uma textura &eacute; do tipo <em>MFString</em>.  Finalmente basta atribuir essa matriz ao campo <em>url</em>.
+    </p>
+    <table width="439" border="1" align="center">
+      <tr>
+        <td><p>X3DNode textura =  mainScene.getNamedNode(&quot;tex&quot;);<br />
+          MFString&nbsp; textura_url = (MFString)  textura.getField(&quot;url&quot;);<br />
+          String[] textura_nova=new String[1]; <br />
+          textura_nova  [0]= (String)&quot;imagem_nova.jpg&quot;; <br />
+        textura_url.set1Value(0,  textura_nova [0]);</p></td>
+      </tr>
+    </table>
+    <p>&Eacute; de real&ccedil;ar a  utiliza&ccedil;&atilde;o do m&eacute;todo set1Value para atribuir este novo valor ao campo <em>url. </em>Isto devido ao facto de se tratar  de um <em>array</em>. Este m&eacute;todo utilizar  dois valores. O primeiro &eacute; o &iacute;ndice do <em>array</em> onde vai ser introduzido o valor para a nova <em>url</em>. O segundo valor &eacute; a <em>string</em> que corresponde ao novo valor da <em>url</em> da nova imagem que vai servir de textura. </p>
+    <p>&nbsp;</p>
+    <p class="style1"><a name="ex7" id="ex7"></a><a name="_Toc121219761" id="_Toc121219761"> Exemplo 7 - Mudar  Viewpoint do utilizador</a></p>
+    <p>Neste exemplo  vai explicar-se como fazer para modificar o <em>viewpoint</em> actual do utilizador. Para isso deve haver pelo menos dois n&oacute;s <em>viewpoint</em> na cena X3D, tal como se pode  ver no exemplo seguinte. Um deles &eacute; o <em>viewpoint</em> actual (<em>Viewpoint1</em>). O objectivo &eacute;  mudar do Vewpoint1 para o Viewpoint2, que est&aacute; noutra localiza&ccedil;&atilde;o da cena X3D.    </p>
+    <table width="341" height="249" border="1" align="center">
+      <tr>
+        <td><p>&lt;Viewpoint DEF='Viewpoint2'<br />
+  &nbsp;&nbsp;  description=&quot;Viewpoint2&quot;<br />
+  &nbsp;&nbsp; jump='true'<br />
+  &nbsp;&nbsp;  fieldOfView='0.785'<br />
+  &nbsp;&nbsp; position='-3.50144  6.15249 2.00252'<br />
+  &nbsp;&nbsp;  orientation='0 0 1 0'/&gt;<br />
+  &nbsp; &lt;Viewpoint  DEF='Viewpoint1'<br />
+  &nbsp;&nbsp;  description=&quot;Viewpoint1&quot;<br />
+  &nbsp;&nbsp; jump='true'<br />
+  &nbsp;&nbsp;  fieldOfView='0.785'<br />
+  &nbsp;&nbsp;  position='3.55712 .6192 9.53834'<br />
+  &nbsp;&nbsp;  orientation='0 0 1 0'/&gt;</p></td>
+      </tr>
+    </table>
+    <p>Esta altera&ccedil;&atilde;o &eacute;  relativamente simples. Tal como em todos os exemplos anteriores, &eacute; necess&aacute;rio  aceder ao n&oacute;, ao qual pertence o campo onde &eacute; necess&aacute;rio fazer a altera&ccedil;&atilde;o.  Neste caso esse n&oacute; &eacute; o <em>'Viewpoint2</em>,  que &eacute; o <em>Viewpoint</em> que pretendemos  activar. </p>
+    <p>Agora basta  aceder ao campo <em>set_bind</em>, que possui  o valor <em>false</em>. Este valor deve passar  para <em>true</em>, de maneira a activar o <em>Viewpoint</em>.    </p>
+    <table width="437" border="1" align="center">
+      <tr>
+        <td><p>X3DNode view2=  mainScene.getNamedNode(&quot;Viewpoint2);<br />
+          SFBool activo02  = (SFBool) view2.getField(&quot;set_bind&quot;);<br />
+        activo02setValue(true);</p></td>
+      </tr>
+    </table>
+    <p>Desta maneira o utilizador &eacute;  deslocado do local onde se encontra o <em>Vewpoint1</em> para a localiza&ccedil;&atilde;o do <em>Vewpoint2</em>.</p>
+    <p>&nbsp;</p>
+    <p class="style1"><a name="ex8" id="ex8"></a><a name="_Toc121219762">Exemplo 8 - Criar n&oacute;s</a></p>
+    <p>Nesta parte vai  demonstrar-se como criar novos n&oacute;s dinamicamente, ou seja, em vez de abrir um  ficheiro X3D pode criar-se toda a cena n&oacute; a n&oacute;. No pr&oacute;ximo exemplo vai ser  criado um cubo. Neste caso especifico n&atilde;o existe nenhum ficheiro x3d, ou seja,  vai criar-se toda a cena de raiz. Mais a frente vai exemplificar-se um exemplo  em que o ficheiro x3d j&aacute; existe, mas onde tamb&eacute;m &eacute; poss&iacute;vel criar n&oacute;s  dinamicamente.</p>
+    <p>Em primeiro  lugar vai criar-se dinamicamente uma cena X3D. Cada cena X3D deve ter declarado  que <em>profile</em> e que componentes vai  usar. Deve ter-se em conta que o browser pode n&atilde;o suportar o <em>profile</em> pretendido, podendo desencadear  uma excep&ccedil;&atilde;o (<em>NotSupportedException</em>).  Neste exemplo o programa vai parar se o <em>profile</em> <em>Immersive</em> n&atilde;o for suportado pelo  browser. A cena propriamente dita vai ser criada com o m&eacute;todo <em>createScene. </em>Este m&eacute;todo cria uma cena  vazia.    </p>
+    <table width="446" border="1" align="center">
+      <tr>
+        <td><p>ProfileInfo  profile = null;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; try {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; profile =  x3dBrowser.getProfile(&quot;Immersive&quot;);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } catch(NotSupportedException nse) {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(&quot;Immersive  Profile not supported&quot;);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.exit(-1);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+        X3DScene  mainScene = x3dBrowser.createScene(profile, null);</p></td>
+      </tr>
+    </table>
+    <p>Pode-se ent&atilde;o  agora come&ccedil;ar a criar os n&oacute;s e adiciona-los &agrave; cena. Usa-se para isso o m&eacute;todo <em>createNode. </em>Pode-se ver a seguir a  cria&ccedil;&atilde;o de um n&oacute; de <em>Shape,</em> um cubo (<em>box</em>). Depois de criado o cubo, este &eacute;  definido como geometria da <em>Shape. </em>A <em>Shape </em>&eacute; ent&atilde;o adicionada &agrave; raiz da  recentemente criada cena X3D.&nbsp; <br />
+  &nbsp;</p>
+    <table width="448" border="1" align="center">
+      <tr>
+        <td><p>X3DNode shape = mainScene.createNode(&quot;Shape&quot;);<br />
+          SFNode shape_geometry = (SFNode) (shape.getField(&quot;geometry&quot;));<br />
+          X3DNode box = mainScene.createNode(&quot;Box&quot;);<br />
+          shape_geometry.setValue(box);<br />
+        mainScene.addRootNode(shape);</p></td>
+      </tr>
+    </table>
+    <p>Por outro lado  podemos criar objectos numa cena X3D j&aacute; existente, bastando para isso em vez de  criar a cena, abrir uma j&aacute; criada, tal como t&iacute;nhamos feito para os exemplos  anteriores. Depois disto basta criar os objectos pretendidos</p>
+    <p>&nbsp;</p>
+    <p class="style1"><a name="ex9" id="ex9"></a><a name="_Toc121219765" id="_Toc121219765"> Exemplo 9 - Adicionar  uma <em>route</em></a></p>
+    <p>As <em>routes</em> em X3D servem como meio de enviar  mensagens para os n&oacute;s. Um exemplo de <em>routes</em> s&atilde;o as liga&ccedil;&otilde;es existentes entre um interpolador de uma anima&ccedil;&atilde;o e o objecto  que se pretende mover. Como exemplo para uma anima&ccedil;&atilde;o podemos ter um sensor de  toque associado a um objecto. O <em>touchTime</em> do sensor de toque est&aacute; ligado ao <em>startTime</em> do rel&oacute;gio da anima&ccedil;&atilde;o. O <em>fraction_changed</em> do rel&oacute;gio est&aacute; ligado ao <em>set_fraction </em>do  interpolador de posi&ccedil;&atilde;o. O <em>value_changed </em>do  interpolador de posi&ccedil;&atilde;o est&aacute; ligado &agrave;s coordenadas do objecto que pretendemos  animar. Todas estas liga&ccedil;&otilde;es s&atilde;o <em>routes</em> e enviam valores de uns n&oacute;s para outros. </p>
+    <p><br />
+      No exemplo  seguinte vai demonstrar-se como criar <em>routes</em> dinamicamente, de maneira a iniciar uma anima&ccedil;&atilde;o de um objecto tal como foi  descrito.</p>
+    <p>Vai usar-se o  m&eacute;todo visto anteriormente para escutar mudan&ccedil;as num campo, ou seja, o objecto  que vai ser animado possui um sensor de toque. O <em>touchTime</em> do sensor de toque est&aacute; associado a um m&eacute;todo addX3DEventListener.  Quando o utilizador clica no sensor de toque, o campo <em>touchTime</em> vai sofrer uma altera&ccedil;&atilde;o, accionando a ac&ccedil;&atilde;o que se  encontra na fun&ccedil;&atilde;o <em>readableFieldChanged. </em>Esta  ac&ccedil;&atilde;o ser&aacute; a cria&ccedil;&atilde;o das <em>routes</em> necess&aacute;rias  para a anima&ccedil;&atilde;o do objecto.</p>
+    <table width="577" border="1" align="center">
+      <tr>
+        <td><p>X3DScene  mainScene = x3dBrowser.createX3DFromURL(new String[] { &quot;bola.x3d&quot; });<br />
+          x3dBrowser.replaceWorld(mainScene);</p>
+          <p>//  Encontar o sensor de toque - Sensor1<br />
+            X3DNode  touch = mainScene.getNamedNode(&quot;TOUCH_SENSOR&quot;);<br />
+  &nbsp;&nbsp; <br />
+            //  Encontar campo touchTime<br />
+        SFTime  ttime = (SFTime) touch.getField(&quot;touchTime&quot;);</p></td>
+      </tr>
+    </table>
+    <p>Neste momento vai passar-se &agrave; constru&ccedil;&atilde;o da  fun&ccedil;&atilde;o <em>readableFieldChanged</em>. Depois de se encontrarem na cena X3D todos os  campos necess&aacute;rios para iniciar a anima&ccedil;&atilde;o do objecto, ou seja, o sensor de  toque, o interpolador de posi&ccedil;&atilde;o e o objecto que pretendemos animar pode  procede-se a cria&ccedil;&atilde;o das respectivas <em>routes</em> com o m&eacute;todo <em>addRoute</em>.<br />
+    </p>
+    <p>      Como se pode ver  nas duas ultimas linhas da fun&ccedil;&atilde;o <em>readableFieldChanged</em>,  foram criadas liga&ccedil;&otilde;es entre o sensor de tempo (campo <em>fraction_changed</em>) e o interpolador de posi&ccedil;&atilde;o (campo <em>set_fraction</em>). De seguida foi criada uma  liga&ccedil;&atilde;o entre o interpolador de posi&ccedil;&atilde;o( campo <em>value_changed</em>) e o objecto que se pretende animar (campo <em>translaction</em>). Desta maneira quando o  utilizador clicar no objecto a anima&ccedil;&atilde;o definida no interpolador de posi&ccedil;&atilde;o  ser&aacute; iniciada.</p>
+    <p>&nbsp;</p>
+    <p class="style1"><a name="_Toc121219766" id="_Toc121219766"> </a><a name="ex10" id="ex10"></a><a name="_Toc121219766">Exemplo 10 - Prot&oacute;tipos</a></p>
+    <p>Um proto  (prot&oacute;tipo) &eacute; um tipo de n&oacute; diferente, que funciona como biblioteca de objectos  que podem ser utilizados numa cena X3D. A t&eacute;cnica descrita na sec&ccedil;&atilde;o que  explicava como criar n&oacute;s dinamicamente, estes n&oacute;s eram simplesmente n&oacute;s  existentes no X3D, como cubos ou esferas. Com os protos, &eacute; poss&iacute;vel a modela&ccedil;&atilde;o  de objectos que v&atilde;o ser guardados num ficheiro. Este objectos unicamente v&atilde;o  ser vis&iacute;veis quando aplicados a uma cena X3D, atrav&eacute;s da cria&ccedil;&atilde;o de uma  instancia. Pode por isso criar-se uma biblioteca de objecto complexos que se  poder&atilde;o utilizar na cria&ccedil;&atilde;o din&acirc;mica de um mundo X3D. </p>
+    <p>Isto &eacute; bastante  &uacute;til na medida que se podem criar tantas inst&acirc;ncias quantas as desejadas destes  objectos, assim como modificar as suas caracter&iacute;sticas dinamicamente.</p>
+    <p>Existem dois  tipos de protos, os externos (<em>externProtos</em>)  e os internos. Os externos podem ser chamados a partir de um ficheiro onde estejam  &ldquo;armazenados&rdquo; para outro ficheiro onde se crie a sua inst&acirc;ncia. </p>
+    <p>Os protos  internos devem estar declarados no mesmo ficheiro onde v&atilde;o ser instanciados.  Neste projecto apenas se v&atilde;o usar e referir protos internos. Cada proto pode  ter definido um interface onde v&atilde;o estar declarados todos os n&oacute;s suscept&iacute;veis  de serem acedidos pela programa&ccedil;&atilde;o externa.</p>
+    <p>Nesta sec&ccedil;&atilde;o vai  ser explicado como fazer para usar um proto utilizando o SAI, assim como  modificar as caracter&iacute;sticas de um objecto definido dentro desse prot&oacute;tipo.</p>
+    <p><strong><u>&nbsp;</u></strong></p>
+    <p><strong>Cria&ccedil;&atilde;o de um proto e respectiva  instancia</strong></p>
+    <p>Para criar um proto em primeiro lugar deve-se  criar a declara&ccedil;&atilde;o do proto, onde vai estar a sua representa&ccedil;&atilde;o como se pode  ver a seguir. </p>
+    <table width="587" border="1" align="center">
+      <tr>
+        <td><p>&lt;ProtoDeclare name='Caixa'&gt;<br />
+  &nbsp;&nbsp;&nbsp; &lt;ProtoBody&gt;<br />
+  &nbsp;&nbsp;&nbsp; &lt;Transform DEF='dad_Box1'  translation='.21079 0 .01317'&nbsp;  rotation='.802 0 -.597 .826'&gt;<br />
+  &nbsp;&nbsp; &lt;Shape DEF='Box1'&gt;<br />
+  &nbsp;&nbsp;&nbsp; &lt;Appearance&gt;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; &lt;Material&gt;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;field name='Cor'  type='SFColor' value='.255 .0 .200''/&gt;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/Material&gt;<br />
+  &nbsp;&nbsp;&nbsp; &lt;/Appearance&gt;<br />
+  &nbsp;&nbsp;&nbsp; &lt;Box size='1 1 1' /&gt;<br />
+  &nbsp;&nbsp; &lt;/Shape&gt;<br />
+  &nbsp;  &lt;/Transform&gt;<br />
+  &lt;/ProtoBody&gt;<br />
+  &lt;/ProtoDeclare&gt;</p></td>
+      </tr>
+    </table>
+    <p><br />
+    Esta declara&ccedil;&atilde;o  do proto deve ser feita dentro das tasgs que definem a cena actual.</p>
+    <p>Se o ficheiro  x3d unicamente tiver a declara&ccedil;&atilde;o de um proto tal como foi feito anteriormente,  ao executar este ficheiro no browser o utilizador n&atilde;o vai visualizar nada,  embora se possa ver na declara&ccedil;&atilde;o do proto a defini&ccedil;&atilde;o de um cubo. Para que um  proto possa ser visualizado existe a necessidade de criar uma inst&acirc;ncia deste  proto. Podemos ver a seguir a declara&ccedil;&atilde;o da inst&acirc;ncia para o proto definido  anteriormente:</p>
+    <p>&lt;ProtoInstance  name='Caixa'/&gt;</p>
+    <p>Neste momento ao  executar o ficheiro x3d j&aacute; ser&aacute; poss&iacute;vel visualizar a representa&ccedil;&atilde;o do cubo  definido no proto.</p>
+    <p>At&eacute; agora n&atilde;o se  recorreu ao Java, a cria&ccedil;&atilde;o da inst&acirc;ncia do proto foi feita dentro do mesmo  ficheiro x3d onde existe a declara&ccedil;&atilde;o do mesmo.</p>
+    <p>Vai agora ver-se  uma maneira de criar uma inst&acirc;ncia de um proto dinamicamente, ou seja, usando o  SAI. Em primeiro ligar deve ser criada a declara&ccedil;&atilde;o do proto no ficheiro x3d  especifico. Seguidamente, em vez de criar a inst&acirc;ncia do proto dentro do mesmo  ficheiro, faz-se isso atrav&eacute;s do Java, associando esta ac&ccedil;&atilde;o por exemplo a um  bot&atilde;o.</p>
+    <p>Primeiro deve-se  aceder ao ficheiro x3d onde existe a declara&ccedil;&atilde;o do proto (Proto.x3d). De  seguida acede-se &agrave; declara&ccedil;&atilde;o do proto e cria-se a inst&acirc;ncia do proto atrav&eacute;s  do m&eacute;todo <em>addRootNode</em><em>.</em></p>
+    <table width="500" border="1" align="center">
+      <tr>
+        <td><p>mainScene = x3dBrowser.createX3DFromURL(new String[] { &quot;Proto.x3d&quot;  });<br />
+          instancia_teste=mainScene.getProto(&quot;Caixa&quot;).createInstance();<br />
+        mainScene.addRootNode(instancia_teste);</p></td>
+      </tr>
+    </table>
+    <p>Depois de feito  isto a representa&ccedil;&atilde;o do objecto definido no proto ir&aacute; aparecer de imediato na  cena x3d.</p>
+    <p>Nesta fase j&aacute; se  sabe como criar uma inst&acirc;ncia de um proto dinamicamente. Os protos s&atilde;o &uacute;teis na  medida que se pode ter uma &ldquo;biblioteca&rdquo; de objectos dentro de um ficheiro x3d e  controlar dinamicamente o aparecimento desses objectos numa cena. No entanto,  tal como o proto declarado, n&atilde;o &eacute; poss&iacute;vel aceder aos campos dos n&oacute;s existentes  dentro do proto, ou seja, n&atilde;o seria poss&iacute;vel aplicar nenhum dos exemplos de  acesso e modifica&ccedil;&atilde;o dos campos de um objecto x3d descritos nos exemplos  anteriores. Para alterar esta situa&ccedil;&atilde;o &eacute; necess&aacute;rio fazer algumas modifica&ccedil;&otilde;es.</p>
+    <p>&nbsp;</p>
+    <p><strong>Acesso aos campos dos n&oacute;s de um  prot&oacute;tipo</strong></p>
+    <p>Para se poder  aceder aos campos dos n&oacute;s existentes dentro de um proto existe a necessidade de  se fazer algumas altera&ccedil;&otilde;es. Em primeiro lugar &eacute; necess&aacute;rio a declara&ccedil;&atilde;o de uma  interface dentro da declara&ccedil;&atilde;o do proto. Nesta interface v&atilde;o ser definidos  todos os n&oacute;s aos quais se pretende ter acesso usando o SAI. Para o proto actual  pretende aceder-se e modificar a cor do cubo contido no proto. Desta maneira  vai definir-se uma vari&aacute;vel (Cor) com um valor que vai ser o valor inicial do  cubo mal seja criada a inst&acirc;ncia do proto.    </p>
+    <table width="416" border="1" align="center">
+      <tr>
+        <td><p>&lt;ProtoInterface&gt;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;field name='Cor'  type='SFColor' value='.255 .0 .200' /&gt;<br />
+  &lt;/ProtoInterface&gt;</p></td>
+      </tr>
+    </table>
+    <p>Esta vari&aacute;vel, <em>Cor</em>, &eacute; a vari&aacute;vel que vai ser acedida  pela classe Java para se proceder &agrave; altera&ccedil;&atilde;o da cor do objecto. Dentro do  corpo do proto, no local exacto onde deve ser feita a especifica&ccedil;&atilde;o do material  do objecto do proto vai ser feita a liga&ccedil;&atilde;o com a vari&aacute;vel <em>Cor </em>definida anteriormente. Desta maneira, quando se cria a  instancia do proto o material do objecto vai se definido pelos valores contido  na vari&aacute;vel <em>Cor</em>.
+    </p>
+    <table width="411" border="1" align="center">
+      <tr>
+        <td><p> &lt;Material&gt;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;IS&gt;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;connect  nodeField='diffuseColor' protoField='Cor'/&gt;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/IS&gt;<br />
+  &nbsp;&lt;/Material&gt;</p></td>
+      </tr>
+    </table>
+    <p>Depois de feitas  estas altera&ccedil;&otilde;es &eacute; ent&atilde;o poss&iacute;vel aceder ao campo <em>diffuseColor </em>deste objecto e modificar os seus valores, tal como se  pode ver a seguir. </p>
+    <p>Depois de se  clicar no bot&atilde;o que cria a inst&acirc;ncia do proto, a representa&ccedil;&atilde;o do cubo torna-se  vis&iacute;vel .</p>
+    <p>Para modificar a  cor do objecto acede-se &agrave; vari&aacute;vel <em>Cor </em>que  foi definida na interface criada na declara&ccedil;&atilde;o do proto e de seguida j&aacute; &eacute;  possivel mudar o seu valor para a cor pretendida.    </p>
+    <table width="269" border="1" align="center">
+      <tr>
+        <td><p>//modifica&ccedil;&atilde;o da cor do cubo<br />
+          float[]red = {1,0,0};<br />
+          color = (SFColor) instancia_teste.getField(&quot;Cor&quot;);<br />
+        color.setValue(red);</p></td>
+      </tr>
+    </table>
+    <p>Neste momento  acabou de se mudar a cor de um objecto contido num proto. A partir deste  momento ser&aacute; poss&iacute;vel aceder e alterar as outras caracter&iacute;sticas dos campos tal  como se viu para os exemplos explicados anteriormente.</p>
+    <p>&nbsp;</p>
+    <p class="style1"><a name="ex11" id="ex11"></a><a name="_Toc121838808" id="_Toc121838808">Exemplo 11 - Activar um som</a> </p>
+    <p>O n&oacute; <em>Audioclip</em> possui dois campos que se deve ter em conta para iniciar  a reprodu&ccedil;&atilde;o de um som, o <em>startTime </em>e  o <em>stopTime</em>. Enquanto o som n&atilde;o  estiver a ser reproduzido ambos possuem o valor zero. Para activar um som basta  que o <em>startTime</em> seja maior que o <em>stopTime,</em> pelo que basta simplesmente  passar o valor do startTime para 1, como se pode ver a seguir. </p>
+    <table width="453" border="1" align="center">
+      <tr>
+        <td><p>X3DNode som=  mainScene.getNamedNode(&quot;AClip_nome_do_som&quot;);<br />
+          SFTime  activar_som = (SFTime) som.getField(&quot;startTime&quot;);</p>
+        activar_som.setValue(1);</td>
+      </tr>
+    </table>
+    <p>&nbsp;</p>
+  </div>
+</div>
+</body>
+</html>

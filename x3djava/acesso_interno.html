@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Untitled Document</title>
+<style type="text/css">
+<!--
+#Layer1 {
+	position:absolute;
+	left:7px;
+	top:0;
+	width:656px;
+	height:398px;
+	z-index:1;
+}
+.style1 {
+	font-size: 18px;
+	font-weight: bold;
+}
+a:link {
+	color: #0033CC;
+}
+a:visited {
+	color: #0033CC;
+}
+a:hover {
+	color: #990000;
+}
+a:active {
+	color: #0033CC;
+}
+-->
+</style>
+</head>
+
+<body>
+<div id="Layer1">
+  <div align="justify"><span class="style1">Acesso Interno</span> 
+    <p align="justify">Neste tipo de  acesso existe um n&oacute; de script dentro do ficheiro X3D que vai fazer a liga&ccedil;&atilde;o  com a classe Java, ou seja, &eacute; a pr&oacute;pria cena X3D que, ao ser carregada num  browser X3D, vai chamar a classe Java onde existe o c&oacute;digo que vai efectuar as  altera&ccedil;&otilde;es pretendidas na cena.</p>
+    <p align="justify">&nbsp;</p>
+    <p align="justify"><a href="#filosofia">Filosofia de programa&ccedil;&atilde;o </a></p>
+    <p align="justify"><a href="#ex1">Mudar a cor de um objecto</a></p>
+    <p align="justify"><a href="#ex2">Mudar as coordenadas de um objecto </a></p>
+    <p align="justify">&nbsp;</p>
+    <p align="justify">_______________________________________</p>
+    <p align="justify">&nbsp;</p>
+    <p align="justify" class="style1"><a name="filosofia" id="filosofia"></a>Filosofia da programa&ccedil;&atilde;o </p>
+    <p align="justify">Em primeiro  lugar &eacute; necess&aacute;rio definir, no ficheiro X3D, o interface do <em>script</em> que vai chamar a classe Java  assim como as <em>routes</em> necess&aacute;rias.</p>
+    <p align="center"><br />
+        <img src="imagens\acesso_interno\acesso_interno_clip_image003.jpg" alt="aa" width="630" height="287" /><br />
+    </p>
+    <p align="justify">O interface do <em>script</em> &eacute; constitu&iacute;do por campos de  entrada e sa&iacute;da. Quando for gerado, na cena X3D, o campo de entrada, a classe Java &eacute; executada e o seu valor  de sa&iacute;da &eacute; enviado atrav&eacute;s do campo de sa&iacute;da. As <em>routes</em> servem para fazer a liga&ccedil;&atilde;o entre os objectos da cena X3D e  os respectivos campos de entrada e sa&iacute;da definidos no interface do <em>script</em>.</p>
+    <p align="justify">O segundo passo, agora j&aacute; na classe Java, &eacute; a  importa&ccedil;&atilde;o do <em>package org.web3d.x3d.sai</em>,  necess&aacute;rio para executar o SAI.</p>
+    <div align="justify">
+      <table width="200" border="1" align="center">
+        <tr>
+          <td><p>import  org.web3d.x3d.sai.*;</p></td>
+        </tr>
+      </table>
+    </div>
+    <p align="justify">Tamb&eacute;m &eacute;  necess&aacute;rio implementar o interface <em>X3DScriptImplementation</em>, que vai permitir o acesso ao ficheiro X3D.</p>
+    <div align="justify">
+      <table width="377" border="1" align="center">
+        <tr>
+          <td width="525"><p>public class Jcubo implements  X3DScriptImplementation {</p></td>
+        </tr>
+      </table>
+    </div>
+    <p align="justify">O passo seguinte  &eacute; aceder aos campos definidos no interface do <em>Script</em> atrav&eacute;s da classe Java, utilizando o m&eacute;todo <em>setFileds</em><em>.</em></p>
+    <div align="justify">
+      <table width="499" height="102" border="1" align="center">
+        <tr>
+          <td width="452"><p>public void setFields(X3DScriptNode externalView, Map  fields) {<br />
+            this.fields =  fields;<br />
+            isOver = (SFBool)  fields.get(&quot;isOver&quot;);<br />
+          diffuseColor =  (SFColor) fields.get(&quot;diffuseColor_changed&quot;);</p></td>
+        </tr>
+      </table>
+    </div>
+    <p align="justify">Para controlar  se foi gerado o evento <em>InputOnly</em> definido no interface do <em>script</em>, a  classe precisa de implementar o interface <em>X3DFieldEventListener.</em> Desta maneira vai ser adicionado um <em>listener</em> campo pretendido.</p>
+    <div align="justify">
+      <table width="200" border="1" align="center">
+        <tr>
+          <td><p align="center">isOver.addX3DEventListener(this); </p></td>
+        </tr>
+      </table>
+    </div>
+    <p align="justify">Quando ocorre  uma mudan&ccedil;a do estado do campo que tem associado um <em>listener, </em>vai ser desencadeada a fun&ccedil;&atilde;o <em>readableFieldChanged,</em> executando-se as suas instru&ccedil;&otilde;es. Neste caso,  essas instru&ccedil;&otilde;es passam pela modifica&ccedil;&atilde;o dos valores dos campos pretendidos e do  envio desses valores de regresso &agrave; cena X3D atrav&eacute;s do m&eacute;todo <em>setValue.</em></p>
+    <p align="justify"><br />
+    </p>
+    <div align="justify">
+      <table width="359" border="1" align="center">
+        <tr>
+          <td><p>public void readableFieldChanged(X3DFieldEvent  evt) {<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  if (evt.getSource() == isOver) {<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (isOver.getValue() == true){<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; diffuseColor.setValue(VERMELHO); <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &hellip;&nbsp; </p></td>
+        </tr>
+      </table>
+    </div>
+    <p align="justify">Pode ver-se na seguinte figura uma representa&ccedil;&atilde;o da filosofia de programa&ccedil;&atilde;o do  acesso interno.</p>
+    <p align="center"><img src="imagens/acesso_interno/acesso_interno_filosofia.jpg" width="467" height="298" /><br />
+    </p>
+    <p align="justify">Para melhor se  entender este tipo de acesso e em jeito de tutorial vai ser apresentado um  exemplo de acesso interno a uma cena X3D. Pretende-se, com este exemplo  contribuir para que potenciais interessados neste tipo de programa&ccedil;&atilde;o possam  aprender, colmatando a falta de informa&ccedil;&atilde;o bibliogr&aacute;fica existente.</p>
+    <p align="justify">&nbsp;</p>
+    <p align="justify" class="style1"><a name="ex1" id="ex1"></a>Exemplo 1 - Mudar a cor de um objecto </p>
+    <p align="justify">Neste exemplo  vai explicar-se como mudar a cor a um objecto. Associado ao objecto existe um  sensor de toque. A cor ser&aacute; mudada quando o utilizador passar com o rato em  cima do objecto, ou seja, quando for detectado o evento <em>isOver</em> deste sensor de toque.</p>
+    <p align="justify"><br />
+      A primeira coisa  a fazer &eacute; a cria&ccedil;&atilde;o do objecto e a associa&ccedil;&atilde;o do mesmo com um sensor de toque.</p>
+    <div align="justify">
+      <table width="413" border="1" align="center">
+        <tr>
+          <td><p>&lt;Group  DEF='GROUND'&gt;<br />
+            &nbsp;&nbsp; &lt;Transform DEF='dad_Box1'  translation='-.0527 0 .0527'&gt;<br />
+            &nbsp;&nbsp;&nbsp; &lt;Shape DEF='Box1'&gt;<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;Appearance&gt;<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;Material DEF=&quot;MAT&quot; <br />
+            &nbsp;&nbsp; &hellip;&nbsp; <br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/Appearance&gt;<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;Box size='1 1 1' solid='true' /&gt;<br />
+            &nbsp;&nbsp;&nbsp;&nbsp; &lt;/Shape&gt;<br />
+            &nbsp;&nbsp; &lt;TouchSensor DEF=&quot;TS&quot;/&gt; <br />
+            &nbsp;&nbsp; &lt;/Transform&gt;<br />
+          &nbsp; &lt;/Group&gt; </p></td>
+        </tr>
+      </table>
+    </div>
+    <p align="justify">Seguidamente,  vai definir-se o <em>script</em> que vai  aceder &agrave; classe Java.<br />
+    </p>
+    <div align="justify">
+      <table width="438" border="1" align="center">
+        <tr>
+          <td><p>&lt;Script  DEF=&quot;SC&quot; url=&quot;&amp;quot;Jcubo.class&amp;quot; &quot;&gt;<br />
+            &lt;field  accessType=&quot;inputOnly&quot; name=&quot;isOver&quot;  type=&quot;SFBool&quot;/&gt;<br />
+            &lt;field  accessType=&quot;outputOnly&quot; name=&quot;diffuseColor_changed&quot;  type=&quot;SFColor&quot;/&gt;<br />
+          &lt;/Script&gt;</p></td>
+        </tr>
+      </table>
+    </div>
+    <p align="justify"><br />
+    Em primeiro  lugar &eacute; definido o nome do <em>script</em> e a  classe Java &agrave; qual se vai aceder. Depois v&atilde;o definir-se quais s&atilde;o os campos de entrada  e sa&iacute;da, como neste caso enviamos o evento <em>isOver</em> do sensor de toque e esperamos que a classe Java modifique a cor do objecto (<em>diffusecolor</em>) s&atilde;o estes mesmos os campo  de entrada e sa&iacute;da. </p>
+    <div align="justify">
+      <table width="440" border="1" align="center">
+        <tr>
+          <td width="264"><p>&lt;ROUTE  fromField=&quot;isOver&quot; fromNode=&quot;TS&quot;toField=&quot;isOver&quot;  toNode=&quot;SC&quot;/&gt; <br />
+            &lt;ROUTE  fromField=&quot;diffuseColor_changed&quot;fromNode=&quot;SC&quot;<br />
+          toField=&quot;set_diffuseColor&quot;  toNode=&quot;MAT&quot;/&gt;</p></td>
+        </tr>
+      </table>
+    </div>
+    <p align="justify">De seguida v&atilde;o criar-se as liga&ccedil;&otilde;es  necess&aacute;rias para conectar o ficheiro x3d com a classe Java, permitindo o envio  e recep&ccedil;&atilde;o de eventos.<br />
+      <br />
+    Em primeiro  lugar vai ligar-se o campo <em>isOver</em> do  sensor de toque TS ao campo <em>isOver</em> do <em>script</em> que &eacute; a vari&aacute;vel que vai ser  lida na classe Java. Esta vari&aacute;vel deve ter um nome igual dentro da classe  Java. &Eacute; tamb&eacute;m definida a liga&ccedil;&atilde;o que permite o envio dos valores modificados  da classe Java para a cena x3d. Da classe Java &eacute; enviada vari&aacute;vel <em>diffuseColor_changed</em> que vai ser aplicada  ao campo <em>diffusecolor</em> do respectivo  n&oacute;.</p>
+    <div align="justify">
+      <table width="469" border="1" align="center">
+        <tr>
+          <td><p>public void setFields(X3DScriptNode externalView, Map  fields) {<br />
+            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;isOver = (SFBool)  fields.get(&quot;isOver&quot;);<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; diffuseColor = (SFColor)  fields.get(&quot;diffuseColor_changed&quot;);<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // escutar eventos no isOver<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  isOver.addX3DEventListener(this);&nbsp;&nbsp;&nbsp; <br />
+          }</p></td>
+        </tr>
+      </table>
+    </div>
+    <p align="justify">S&atilde;o  tamb&eacute;m definidas as vari&aacute;veis que j&aacute; tinham sido referidas anteriormente quando  se fez referencia ao <em>script</em>, e que  v&atilde;o servir como meio de enviar os valores entre o <em>script</em> e a classe Java. Nesta parte recebe-se o evento <em>isOver </em>que vai  ser controlado com o m&eacute;todo <em>addX3DEventListener</em>. </p>
+    <div align="justify">
+      <table width="421" border="1" align="center">
+        <tr>
+          <td><p>public void  readableFieldChanged(X3DFieldEvent evt) {<br />
+            if  (evt.getSource() == isOver) {<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (isOver.getValue() == true)<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; diffuseColor.setValue(VERMELHO); <br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; diffuseColor.setValue(VERDE); <br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(&quot;evento n&atilde;o  suportado: &quot; + evt);<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  }<br />
+          }</p></td>
+        </tr>
+      </table>
+    </div>
+    <p align="justify">Quando  existe uma altera&ccedil;&atilde;o do valor <em>isOver</em> de <em>false</em> para <em>true</em> (cursor do rato em cima do sensor de toque) ou de <em>true</em> para <em>false </em>(cursor do rato fora do sensor de toque) v&atilde;o ser accionados  os eventos presentes na fun&ccedil;&atilde;o <em>readableFieldChanged.</em> Nesta fun&ccedil;&atilde;o ser&atilde;o alterados os valores da vari&aacute;vel <em>diffuseColor</em> com o m&eacute;todo <em>setValue.</em><br />
+      <br />
+    Os  valores das vari&aacute;veis &ldquo;VERMELHO&rdquo; e &ldquo;VERDE&rdquo; tinham sido definidos anteriormente.</p>
+    <div align="justify">
+      <table width="417" border="1" align="center">
+        <tr>
+          <td><p>&nbsp;private static final float[] VERMELHO = new float[] {1.0f, 0, 0};<br />
+            &nbsp;<br />
+          private static  final float[] VERDE = new float[] {0, 1.0f, 0};</p></td>
+        </tr>
+      </table>
+    </div>
+    <p align="justify"><br />
+      Deste modo, cada vez que o utilizador passar  com o rato em cima do objecto, a cor do objecto vai passar a vermelho. Quando o  utilizado tirar o cursor do rato de cima do objecto a sua cor vai passara a  verde.</p>
+    <p align="justify">&nbsp;</p>
+    <p align="justify" class="style1"><a name="ex2" id="ex2"></a>Exemplo 2 - Mudar as coordenadas de um objecto </p>
+    <p>Neste caso no  ficheiro x3d existem dois objectos. Uma esfera com um sensor de toque, e um  cone. Pretende-se que ao clicar na esfera se mudem as coordenadas do cone.</p>
+    <p>Pode ver-se a seguir o <em>script</em> que ser&aacute; respons&aacute;vel por fazer a liga&ccedil;&atilde;o com a classe Java. Essa classe &eacute; a Coord2.class.  O evento enviado ser&aacute; o <em>isActive </em>do  sensor de toque TS_02. O evento recebido ser&aacute; o <em>translation </em>que ser&aacute; aplicado ao n&oacute; <em>dad_Cone. </em></p>
+    <table width="549" border="1" align="center">
+      <tr>
+        <td><p>&lt;Script  DEF=&quot;SC2&quot; url=&quot;&amp;quot;Coord2.class&amp;quot; &quot;&gt;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;field  accessType=&quot;inputOnly&quot; name=&quot;isActive&quot;  type=&quot;SFBool&quot;/&gt;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;field  accessType=&quot;outputOnly&quot; name=&quot;translation_changed&quot;  type=&quot;SFVec3f&quot;/&gt;<br />
+  &nbsp;&nbsp;&nbsp; &lt;/Script&gt;<br />
+  &nbsp;&nbsp;&nbsp; &lt;ROUTE fromField=&quot;isActive&quot;  fromNode=&quot;TS_02&quot; toField=&quot;isActive&quot;  toNode=&quot;SC2&quot;/&gt;<br />
+  &nbsp;&nbsp;&nbsp; &lt;ROUTE  fromField=&quot;translation_changed&quot; fromNode=&quot;SC2&quot;<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; toField=&quot;set_translation&quot;  toNode=&quot;dad_Cone&quot;/&gt;</p></td>
+      </tr>
+    </table>
+    <p>Na  classe Java, em primeiro lugar acede-se aos campos definidos no interface do <em>script </em>interno e de seguida pode  fazer-se o controlo do estado actual do evento <em>isActive</em> que veio do ficheiro x3d. </p>
+    <table width="405" border="1" align="center">
+      <tr>
+        <td><p>&nbsp; public void initialize() {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; isActive = (SFBool)  fields.get(&quot;isActive&quot;);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; translation = (SFVec3f)  fields.get(&quot;translation_changed&quot;);</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // escutar eventos no campo isOver<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  isActive.addX3DEventListener(this);<br />
+  &nbsp;&nbsp;&nbsp;  } </p></td>
+      </tr>
+    </table>
+    <p>Na fun&ccedil;&atilde;o <em>readableFieldChanged</em> s&atilde;o feitas as altera&ccedil;&otilde;es do campo <em>tranlation</em> de acordo com a mudan&ccedil;a dos valores do campo <em>isActive</em> do sensor de toque de <em>false</em> para <em>true.</em></p>
+    <table width="398" border="1" align="center">
+      <tr>
+        <td><p>public void  readableFieldChanged(X3DFieldEvent evt) {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (evt.getSource() == isActive) {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (isActive.getValue() == true)<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; translation.setValue(CENTRO);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  } else {<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(&quot;evento n&atilde;o  suportado: &quot; + evt);<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  }<br />
+  &nbsp;&nbsp;&nbsp;  }</p></td>
+      </tr>
+    </table>
+    <p>A vari&aacute;vel &ldquo;CENTRO&rdquo;  j&aacute; tinha sido declarada anteriormente.</p>
+    <table width="444" border="1" align="center">
+      <tr>
+        <td><p>private static  final float[] CENTRO = new float[] {-0.132f, 2.766f, 0};</p></td>
+      </tr>
+    </table>
+    <p>Desta maneira cada vez que o utilizador  clicar na esfera, o cone vai ser transladado da sua posi&ccedil;&atilde;o inicial para a nova  posi&ccedil;&atilde;o. </p>
+    <p class="style1">&nbsp;</p>
+  </div>
+</div>
+</body>
+</html>
