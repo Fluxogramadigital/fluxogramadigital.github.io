@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#053107">
+  <meta name="description" content="4.º Passeio TT Cubo – Guarda, 14 de fevereiro de 2027. Informações, inscrições e tracks GPX/KML.">
+  <title>Passeio TT Cubo – Guarda</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="hero" aria-label="Passeio TT Cubo – Guarda">
+    <div class="hero__mountains" aria-hidden="true">
+      <svg viewBox="0 0 600 105" fill="none" role="presentation"><path d="m8 92 70-37 31 19 59-51 54 49 36-23 45 39 70-74 82 66 34-22 52 34" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="m147 42 21-19 17 16m171 0 17-25 24 18" stroke="#b5e3b4" stroke-width="4" stroke-linecap="round"/></svg>
+    </div>
+    <div class="container hero__inner">
+      <div class="hero__rule" aria-hidden="true"></div>
+      <h1>Passeio TT <span>Cubo – Guarda</span></h1>
+      <div class="hero__rule" aria-hidden="true"></div>
+      <p class="hero__subtitle">4.ª edição <span aria-hidden="true">•</span> 14 de fevereiro de 2027</p>
+    </div>
+    <svg class="hero__landscape" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true"><path d="M0 78 95 96 180 72 250 90 335 56 420 84 525 36 640 85 705 64 794 93 905 40 1010 82 1100 58 1205 80 1295 42 1440 77V140H0Z" fill="#0c471d"/><path d="M0 110 140 96 240 120 330 86 475 115 595 90 760 118 900 88 1000 108 1150 86 1300 110 1440 93V140H0Z" fill="#06310a"/></svg>
+  </header>
+
+  <main>
+    <section class="poster-section container" aria-label="Cartaz oficial">
+      <figure class="poster">
+        <img src="assets/cartaz-oficial.webp" alt="Cartaz oficial do 4.º Passeio TT Cubo – Guarda, a realizar em 14 de fevereiro de 2027, com o programa e os logótipos da organização e dos apoios." width="2048" height="1447" fetchpriority="high">
+      </figure>
+    </section>
+
+    <section class="about container" aria-labelledby="evento-title">
+      <div class="section-heading"><span></span><h2 id="evento-title">O Evento</h2><span></span></div>
+      <p>O Passeio TT de Cubo – Guarda está de regresso para a sua <strong>4.ª edição!</strong> Um passeio todo-o-terreno pensado para os amantes da aventura, da natureza e da boa companhia. Percursos variados, paisagens únicas da região da Guarda e o espírito de convívio que torna este evento especial. Junta a tua máquina, a tua equipa e vem descobrir <strong>os trilhos da região!</strong></p>
+    </section>
+
+    <section class="actions container" aria-label="Inscrições e tracks">
+      <article class="action-card">
+        <div class="action-card__icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none"><rect x="10" y="9" width="28" height="34" rx="4" stroke="currentColor" stroke-width="2.5"/><path d="M19 9V7a5 5 0 0 1 10 0v2M17 21l3 3 5-6m-8 17 3 3 5-6m3-10h5m-5 13h5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="action-card__content">
+          <h2>Inscrições</h2>
+          <p>As inscrições para o 4.º Passeio TT Cubo – Guarda abrirão brevemente. Fica atento às novidades!</p>
+          <a class="button button--primary is-unavailable" id="registration-link" aria-disabled="true" tabindex="-1">Formulário de inscrição <span aria-hidden="true">↗</span></a>
+          <p class="status" id="registration-status" role="status">Disponível brevemente</p>
+        </div>
+      </article>
+      <article class="action-card">
+        <div class="action-card__icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none"><path d="M15 39c-7-3-6-11 1-13 5-2 7 4 13 1 5-2 7 1 5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 4"/><path d="M33 4a9 9 0 0 0-9 9c0 6 9 15 9 15s9-9 9-15a9 9 0 0 0-9-9Z" stroke="currentColor" stroke-width="2.5"/><circle cx="33" cy="13" r="3" fill="currentColor"/></svg>
+        </div>
+        <div class="action-card__content">
+          <h2>Tracks dos percursos</h2>
+          <p>Consulta e descarrega os tracks em formato GPX ou KML para o teu dispositivo de navegação.</p>
+          <div class="downloads">
+            <a class="button button--outline is-unavailable" id="gpx-link" aria-disabled="true" tabindex="-1">↓ Descarregar GPX</a>
+            <a class="button button--outline is-unavailable" id="kml-link" aria-disabled="true" tabindex="-1">↓ Descarregar KML</a>
+          </div>
+          <p class="status" id="tracks-status" role="status">Tracks disponíveis brevemente</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__organizers">
+        <h2>Organização</h2>
+        <img class="footer__logo" src="assets/comissao-festas.png" alt="Comissão de Festas Nossa Senhora da Póvoa – Cubo, 2026–2027" width="80" height="80" loading="lazy">
+        <span>Comissão de Festas Nossa Senhora da Póvoa – Cubo<br>Centro de Convívio e Animação Cultural do Cubo</span>
+      </div>
+      <div class="footer__support">
+        <h2>Apoios</h2>
+        <span>Brut's Land · Município da Guarda · Juntas de Freguesia</span>
+      </div>
+    </div>
+    <p class="footer__note">© 2027 Passeio TT Cubo – Guarda</p>
+  </footer>
+</body>
+</html>
